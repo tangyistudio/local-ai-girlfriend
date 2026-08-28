@@ -4,12 +4,13 @@
  *
  * Three things here are worth knowing about.
  *
- * `ask()` plays a filler clip and THEN the answer, which is the production
- * sequence rather than a presentation flourish. The character says "let me
- * think" while a reply renders, so the wait becomes something she is doing
- * instead of a spinner. See docs/04-latency.md — after the model choice, the
- * pipelining and the caching, what is left is genuine computation and the only
- * remaining move is to cover it.
+ * `ask()` cuts straight to the answer, interrupting whatever rotation clip is
+ * on screen. It used to play a "let me think" filler first, which is what
+ * production does - see docs/04-latency.md, where after the model choice, the
+ * pipelining and the caching what remains is genuine computation and the only
+ * move left is to cover it with something the character is plausibly doing.
+ * Nothing is computed here, so the filler covered nothing and cost four seconds
+ * per answer. A filler is worth exactly as much as the wait it hides.
  *
  * The transcript is driven by player EVENTS, not timers. The answer bubble
  * appears on `speakstart` for the answer clip, so text and mouth cannot drift
@@ -95,8 +96,11 @@ export function mountDemo({ els }) {
     return row;
   }
 
-  let thinking = null;
-  const clearThinking = () => { if (thinking) { thinking.remove(); thinking = null; } };
+  // ⚠️ There is no "typing..." state here, deliberately. It belonged to the
+  // filler clip: something had to fill the four seconds before the answer
+  // started. The answer now starts in the same tick as the click - measured at
+  // 17 ms to the bubble - so an indicator would appear and vanish inside one
+  // frame. Removing the cause removed the need for the indicator.
 
   /**
    * ⚠️ The unlock has a deadline, and it is not belt-and-braces.
@@ -119,8 +123,7 @@ export function mountDemo({ els }) {
     if (busy) {
       unlockTimer = setTimeout(() => {
         log('unlocked    no idle event arrived — releasing the buttons');
-        clearThinking();
-        pending = null;
+            pending = null;
         for (const b of els.askButtons || []) b.disabled = false;
       }, 20000);
     }
@@ -131,14 +134,12 @@ export function mountDemo({ els }) {
   stage.on('speakstart', (u) => {
     log(`speaking    ${u.split('/').pop()}`);
     if (pending && u === pending.url) {
-      clearThinking();
-      bubble('her', pending.q.answerEn, pending.q.answerZh);
+        bubble('her', pending.q.answerEn, pending.q.answerZh);
       pending = null;
     }
   });
   stage.on('idle', () => {
     log('idle        back to the rotation');
-    clearThinking();
     pending = null;
     setAsking(false);
   });
@@ -188,17 +189,16 @@ export function mountDemo({ els }) {
   /**
    * Ask a canned question.
    *
-   * ⚠️ Two clips are queued, not one: a filler and then the answer. That is the
-   * production sequence — the filler covers the render, the answer follows. It
-   * is also the only part of this demo that is honest about time, since
-   * everything here is pre-rendered and the real wait has been removed.
+   * ⚠️ `speakNow`, not `setSpeakQueue`. The queue is only consulted at the next
+   * handover, so setting it would make the viewer sit out the rest of whatever
+   * idle clip is playing - up to five seconds of nothing happening after they
+   * clicked. Measured click-to-answer with this: 17 ms.
    */
   function ask(i) {
     const q = QUESTIONS[i];
     const answer = look.answers[i];
     if (!q || !answer) return;
     bubble('you', q.en, q.zh);
-    clearThinking();
     pending = { url: answer, q };
     setAsking(true);
     // Straight to the answer, cutting the rotation clip off where it stands.

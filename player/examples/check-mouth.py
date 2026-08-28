@@ -29,9 +29,13 @@ After fixing both, the same nine clips measure 0.002-0.137.
 
 WHAT IT MEASURES
 ----------------
-`jawOpen`, a MediaPipe face blendshape. Not a proxy - the actual quantity. The
-model is the same face landmarker already used to replace a non-commercial
-detector on the inference path, so it introduces no new licence question.
+`jawOpen`, a MediaPipe face blendshape. Not a proxy - the actual quantity.
+
+⚠️ This is a CHECKING tool, not part of any inference path, and MediaPipe's face
+landmarker is Apache-2.0 - so running it raises no licence question. Do not read
+that as "the detector problem in docs/07-licenses.md is solved here". It is not:
+that document lists replacing a non-commercial detector as work this repository
+has NOT done.
 
 ⚠️ CALIBRATE THE THRESHOLD PER FACE. A character whose neutral expression has
 slightly parted lips reads higher at rest than one with a closed mouth: two

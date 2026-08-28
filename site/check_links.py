@@ -98,7 +98,12 @@ def main():
 
     # The runtime-built clip URLs name a directory; make sure it has clips in it.
     clips = os.path.join(ROOT, "player", "examples", "clips")
-    n_clips = len([f for f in os.listdir(clips)]) if os.path.isdir(clips) else 0
+    # ⚠️ Count CLIPS, not directory entries. MANIFEST.md lives here too, so the
+    # unfiltered version reported 19 for 18 clips - a miscount printed by a
+    # verification tool, in a repository whose argument is that numbers are
+    # checked.
+    n_clips = (len([f for f in os.listdir(clips) if f.endswith('.mp4')])
+               if os.path.isdir(clips) else 0)
     if n_clips == 0:
         problems.append("player/examples/clips is empty - run make-clips.sh")
 

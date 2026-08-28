@@ -12,7 +12,7 @@ thing we learned:
 
 > **Components do not have a fixed size. They take less when there is less.**
 > The TTS held 5.1 GB with 24 GB available and ran in **2.7 GB** when we
-> constrained the card to 8 GB - returning HTTP 200 at plausible sizes, 26% slower
+> constrained the card to 8 GB - returning HTTP 200 at plausible sizes, 18-26% slower
 > on short sentences and no slower at all on long ones.
 
 ⚠️ We did not compare the audio itself. Nothing in `bench/` does, and generation
@@ -22,13 +22,13 @@ was verified identical.
 
 That breaks the arithmetic every guide does, including the first draft of this
 one. We wrote "8 GB: no, the TTS alone is 5.1 GB and only 4.8 GB is free", then
-tested it and found the whole thing running in **7,498 of 8,192 MiB**. Adding
+tested it and found the whole thing running in **7,052-7,615 of 8,192 MiB**. Adding
 up component sizes measured on a big card will tell you a small card cannot do
 something it can.
 
 | Card | Verdict | How we know |
 |---|---|---|
-| 8 GB | **TTS + lip-sync, LLM remote.** Runs. 7,498 / 8,192 MiB. | tested under ballast |
+| 8 GB | **TTS + lip-sync, LLM remote.** Runs. 7,052-7,615 / 8,192 MiB. | tested under ballast |
 | 16 GB | **Everything local**, 8B at up to 32k context. Tight under sustained load. | tested under ballast |
 | 24 GB | **Comfortable.** Or a 27B, at a quarter of the token rate. | tested directly |
 | 32 GB | Not tested. We do not have the hardware. | arithmetic only |

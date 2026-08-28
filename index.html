@@ -117,25 +117,28 @@
       <figure class="look-card" style="margin:0">
         <img src="site/img/look-knit.jpg" alt="" loading="lazy" width="520" height="936">
         <figcaption class="cap"><b><span data-l="en">Knit sweater</span><span data-l="zh">針織衫</span></b>
-          <span data-l="en">8 clips · daytime room</span><span data-l="zh">8 支片 · 白天室內</span></figcaption>
+          <span data-l="en">6 clips · daytime room</span><span data-l="zh">6 支片 · 白天室內</span></figcaption>
       </figure>
       <figure class="look-card" style="margin:0">
         <img src="site/img/look-shirt.jpg" alt="" loading="lazy" width="520" height="936">
         <figcaption class="cap"><b><span data-l="en">Blouse</span><span data-l="zh">襯衫</span></b>
-          <span data-l="en">8 clips · office</span><span data-l="zh">8 支片 · 辦公室</span></figcaption>
+          <span data-l="en">6 clips · office</span><span data-l="zh">6 支片 · 辦公室</span></figcaption>
       </figure>
       <figure class="look-card" style="margin:0">
         <img src="site/img/look-pj.jpg" alt="" loading="lazy" width="520" height="936">
         <figcaption class="cap"><b><span data-l="en">Nightwear</span><span data-l="zh">睡衣</span></b>
-          <span data-l="en">8 clips · evening</span><span data-l="zh">8 支片 · 夜晚</span></figcaption>
+          <span data-l="en">6 clips · evening</span><span data-l="zh">6 支片 · 夜晚</span></figcaption>
       </figure>
     </div>
 
     <p class="dim" style="font-size:13.5px">
-      <span data-l="en">The character is generated, not a person. No likeness tooling ships in this
-        repository and none is documented in it — that line is deliberate and it is the one thing
-        here that is a policy rather than a measurement.</span>
-      <span data-l="zh">這個角色是生成的，不是真人。這個 repo 不附帶、也不記載任何真人胖像的工具——這條界線是刻意畫的，也是這裡唯一一件屬於政策而非量測的事。</span></p>
+      <span data-l="en">Xiaoxian is a generated likeness derived from a real person, who owns it and
+        consented to its publication here — which is why she is © Tangyi Studio and not part of the
+        code licence. What is <em>not</em> here: no likeness tooling ships in this repository and
+        none is documented in it. Nothing here helps anyone put a face onto a body they do not own.
+        That line is deliberate and it is the one thing on this page that is a policy rather than a
+        measurement.</span>
+      <span data-l="zh">小嫻是從一位真人衍生出來的生成肖像，權利屬於那個人，而那個人同意在這裡公開——這正是為什麼她是 © Tangyi Studio、不在程式碼授權的範圍內。<em>不</em>在這裡的東西是：這個 repo 不附帶、也不記載任何真人肖像的工具。這裡沒有任何東西能幫別人把一張臉套到不屬於他的身體上。這條界線是刻意畫的，也是這一頁上唯一一件屬於政策而非量測的事。</span></p>
   </div>
 </section>
 
@@ -208,11 +211,14 @@
   <div class="wrap">
     <h2><span data-l="en">What that demo is actually doing</span><span data-l="zh">那個 demo 實際上在做什麼</span></h2>
     <p>
-      <span data-l="en">Asking a question queues <b>two</b> clips: a filler, then the answer. That is
-        the production sequence — she says “let me think” while a reply renders, so the wait becomes
-        something she is doing instead of a spinner. After the model choice, the pipelining and the
-        caching, what is left is genuine computation, and the remaining move is to cover it.</span>
-      <span data-l="zh">問一個問題會排入**兩支**片段：先墊詞，再答案。那是生產環境的序列——她說「讓我想想」，同時回覆在算，於是等待變成她正在做的一件事，而不是一個轉圈圈。在選完模型、做完管線化與快取之後，剩下的是真實運算，而剩下的招數就是把它蓋起來。</span>
+      <span data-l="en">Asking a question cuts straight to the answer, interrupting whatever idle
+        clip is on screen. An earlier version played a “let me think” filler first, because that is
+        what production does: after the model choice, the pipelining and the caching, what is left
+        is genuine computation, and the remaining move is to cover it with something the character
+        is plausibly doing. Nothing is computed here, so the filler was covering nothing and made
+        every answer four seconds late. <b>A filler is worth exactly as much as the wait it
+        hides.</b></span>
+      <span data-l="zh">問一個問題會直接切到答案，就地打斷當下正在播的待機片。先前的版本會先播一支「讓我想想」的墊詞片，因為生產環境就是那樣做的：在選完模型、做完管線化與快取之後，剩下的是真實運算，而剩下的招數就是用一件角色合理會做的事把它蓋起來。但這裡沒有任何東西在算，所以墊詞片什麼都沒蓋到，只讓每個答覆晚了四秒。<b>墊詞片的價值，剛好等於它蓋掉的那段等待。</b></span>
     </p>
     <div class="grid two" style="align-items:start">
       <div class="log" id="log"></div>
@@ -235,7 +241,7 @@
 
     <div class="callout" style="margin-top:22px">
       <p><span data-l="en"><b>The clip library is where the architecture gets tested, and it failed
-        three times before it passed.</b> Every clip here — idle, filler and answer — is rendered by
+        three times before it passed.</b> Every clip here — idle and answer alike — is rendered by
         the same lip-sync engine over a <b>124</b>-frame base clip, with the audio padded to exactly
         that length. Both halves matter. Padding is what makes a talking clip <em>end</em> on the
         pivot: the engine renders <code>ceil(seconds × fps)</code> frames of the base from frame 0, so

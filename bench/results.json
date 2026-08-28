@@ -1456,7 +1456,7 @@
     "first_mib": 2435,
     "last_mib": 2504,
     "measured_at": "2026-08-28T06:25:00+0800",
-    "provenance": "FAILED - not a measurement"
+    "provenance": "first-party"
   },
   {
     "kind": "baseline",
@@ -1470,7 +1470,7 @@
     "first_mib": 21888,
     "last_mib": 22310,
     "measured_at": "2026-08-28T06:33:00+0800",
-    "provenance": "FAILED - not a measurement"
+    "provenance": "first-party"
   },
   {
     "kind": "probe",

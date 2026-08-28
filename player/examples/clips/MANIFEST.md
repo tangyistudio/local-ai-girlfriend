@@ -79,15 +79,30 @@ the same nine clips read **0.002 to 0.137**.
 
 ## What is still imperfect, and by how much
 
-First frames across a look agree to a worst 12x12 block of 0.00-6.6 out of 255.
-Last frames are worse: 7.4-8.1 for the rotation clips, and up to 22.5 for one
-look's answers. The bases are not the cause - measured against each other they
-agree to 4.1-5.5 at the first frame and 5.0-7.2 at the last. The generator adds
-the drift at the end of a sequence, where it has the least future context.
+Every figure below is the worst 12x12 block out of 255, from
+`check-clips.sh`, each clip against its own look's reference frame.
 
-How much it adds is bought with mouth movement:
+**First frames are fine everywhere: 0.00 to 6.61.**
 
-| amplitude | seam (worst block) | note |
+**Last frames split the library in two, and the split is by look, not by clip
+type:**
+
+| Look | rotation clips | answer clips |
+|---|---|---|
+| knit | 7.38 - 8.09 | 12.63 - 18.12 |
+| pj | 7.51 - 7.85 | 12.74 - 18.62 |
+| shirt | 20.03 - 22.64 | 22.02 - 23.03 |
+
+So `check-clips.sh` returns 1 on this library: 8 of 18 clips land in
+`ENDS ELSEWHERE`, all six `shirt` clips among them. That is the tool's honest
+verdict on our own data and it was not tuned away.
+
+The base clips are not the cause. Measured against each other they agree to
+4.1-5.5 at the first frame and 5.0-7.2 at the last. The generator adds the drift
+at the end of a sequence, where it has the least future context, and how much it
+adds is bought with mouth movement:
+
+| amplitude | seam | note |
 |---|---|---|
 | 0.45 | 7.7 | mouth movement rejected as too small |
 | 0.60 | 10.2 | |
@@ -95,20 +110,21 @@ How much it adds is bought with mouth movement:
 | 1.20 | 17.5 | the amplitude shipped for talking clips |
 
 Two fixes were measured and rejected. The engine's own expression fade made it
-worse - 29.7 to 54.1 - because it fades toward a neutral face rather than
-toward the base's face. Ending each clip on whichever of its last 25 frames
-sits closest to the reference recovered almost nothing, 22.2 to 19.9, which is
-what tells you the whole tail has drifted rather than one frame being bad.
+worse, 29.7 to 54.1, because it fades toward a neutral face rather than toward
+the base's face. Ending each clip on whichever of its last 25 frames sits
+closest to the reference recovered almost nothing, 22.2 to 19.9 - which is what
+tells you the whole tail drifted rather than one frame being bad.
 
-So the player dissolves for 120 ms rather than hard-cutting. That is a purchase:
-the amplitude buys mouth movement and costs seam, and 120 ms covers the seam.
+**And the `shirt` look is worse than the other two for a reason that is not the
+source material.** The same sentence was rendered over three different sources
+for that look - one purpose-built base and two reaction clips, whose own loop
+error measured 4.5-5.0 before rendering. The renders came out at 21.9, 20.0 and
+23.5. The drift follows the face, not the source, so there is nothing to be
+gained by picking different source clips for it.
 
-One look is worse than the other two and it is not the source material. Its
-clips end 20-22 from their own first frame while the others end at 12.6, so the
-same sentence was rendered over three different sources for that look - a
-purpose-built base and two reaction clips, whose own loop error measured 4.5-5.0
-before rendering. The results were 21.9, 20.0 and 23.5. The drift follows the
-face, not the source. Measure across sources once and then stop looking.
+The player dissolves for 120 ms rather than hard-cutting, which covers all of
+this. State the purchase plainly: the amplitude buys mouth movement and costs
+seam, and 120 ms covers the seam.
 
 ## Checking them
 

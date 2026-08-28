@@ -216,48 +216,59 @@ and allow the ones that play while nothing is pending to be longer.
 5. **Warm every model, early.** 56 s of cold start.
 6. **Cover the rest with pre-rendered clips.** The remainder is real computation.
 
+## The breakdown that did not add up, re-measured
 
-## Two things this page cannot currently tell you
+An earlier revision of this page said the numbers did not close: 11.9 s end to
+end against 1.75 s of lip-sync and a table row giving 2.7-3.4 s for speech left
+6.8-7.5 s unattributed, more than either named component. That was published as
+an open question rather than smoothed over.
 
-### The breakdown does not add up, and we are not going to hide that
+It has now been measured on the running stack, five uncached sentences of
+comparable length, first call discarded as a cold start:
 
-The headline says one sentence, nothing cached, takes 11.9 s, and that speech
-synthesis is almost the whole wait. The tables below it say lip-sync is 1.75 s
-and speech synthesis with the reference encoding cached is 2.7-3.4 s. That
-leaves 6.8-7.5 s unaccounted for, which is more than either named component.
+| Stage | min | max | mean |
+|---|---|---|---|
+| Speech synthesis, whole request | 6.73 s | 8.60 s | **7.64 s** |
+| Lip-sync, speech already cached | 1.40 s | 2.21 s | **1.74 s** |
+| Both | | | **9.38 s** |
 
-So one of three things is true: the 11.9 s figure was measured on a stack where
-speech synthesis had not yet been fixed, the missing time belongs to the
-language model and the headline attributes it to the wrong stage, or the
-campaigns are not comparable. The source material does not say which, and this
-page will not guess. Treat the component tables as the measurements and the
-headline as unverified until someone re-runs it end to end on one stack.
+Two things follow.
 
-Publishing a number is a promise. Where the arithmetic under a promise does not
-close, saying so is the only honest option available.
+**The lip-sync figure reproduces.** 1.74 s against the 1.75 s recorded by the
+earlier campaign, measured months apart on the same card. That is what says
+these two runs are looking at the same stack and the comparison is fair.
 
-### There is no measurement here for a hosted-API stack
+**The gap was in the speech row, not in the headline.** 11.9 - 7.64 - 1.74
+leaves **2.5 s** for the language model, which is a plausible first-sentence
+figure and closes the arithmetic. So the headline claim - that speech synthesis
+is almost the whole wait - was right, and the 2.7-3.4 s row is what needs the
+caveat: it measures the model call, not the request a caller actually waits on.
+Reference encoding, audio IO and HTTP are the rest, and they are most of it.
 
-A reasonable question is what this costs if the language model and the voice come
-from hosted APIs instead of the local card. We do not have an answer, because we
-did not measure one, and an estimate presented next to measured figures would be
-indistinguishable from them within a week.
+⚠️ The lesson is not "we found the missing seconds". It is that a component
+table and an end-to-end headline measure different things, and publishing both
+without saying so produced a contradiction that stood in this document for as
+long as anyone cared to read it. If your breakdown does not sum to your
+headline, the first suspect is the boundary of each measurement.
 
-What can be said without measuring anything:
+## What this page still cannot tell you
+
+There is no measurement here for a hosted-API stack. A reasonable question is
+what this costs if the language model and the voice come from APIs instead of
+the local card, and the honest answer is that we did not measure one.
+
+What the numbers above do say, and it is worth knowing before anyone spends
+money on it: **moving only the language model to an API buys 2.5 s of the
+11.9 s.** The card is not busy thinking. It is busy talking. Anyone hoping a
+faster LLM endpoint will make a companion feel responsive is optimising the
+wrong stage - the same conclusion the engine comparison reached from the other
+direction.
 
 - **Lip-sync stays where it is.** It is the only stage that consumes the video
   itself, and at 0.37x realtime it already outruns playback. Moving it off the
   card buys nothing and adds a round trip per sentence.
-- **The language model and speech synthesis are the replaceable stages.** They
-  are also the two whose local cost this page reports as the largest, which is
-  what makes the question worth asking.
-- **An API adds a network round trip per sentence, and sentences are split.** The
-  splitting that took the first sentence from 21.9 s to 3.6 s multiplies the
-  number of calls. Per-call overhead is exactly what made streaming *worse* on
-  the diffusion engine - total 34 s to 42.4 s - so a hosted stack has to be
+- **An API adds a network round trip per sentence, and sentences are split.**
+  The splitting that took the first sentence from 21.9 s to 3.6 s multiplies
+  the number of calls. Per-call overhead is exactly what made streaming *worse*
+  on the diffusion engine - total 34 s to 42.4 s - so a hosted stack has to be
   measured per sentence, not once.
-
-If you want that number, the measurement is small: run the same content through
-the same orchestrator with the two stages swapped for API calls, and report
-first-sentence and total separately. Until someone does, this page has nothing
-to offer on it, and a page with a gap is worth more than a page with a guess.

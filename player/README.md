@@ -13,7 +13,7 @@ const stage = new PivotStage({
   a: document.querySelector('#a'),        // two stacked <video> elements
   b: document.querySelector('#b'),
   poster: document.querySelector('#poster'),   // still pivot frame, behind both
-  reactionFadeMs: 0,     // library clips are aligned: hard cut
+  reactionFadeMs: 0,     // 0 only if YOUR clips are aligned - measure first
   speechFadeMs: 200,     // clips that end anywhere: fade
 });
 
@@ -53,7 +53,9 @@ broken path. Resolving against `import.meta.url` was not enough on its own -
 the files were genuinely outside the served root. A package's demo has to be
 self-contained.
 
-Five clips of coloured shapes - no models, no GPU, no download. The demo has
+Eighteen clips of the demo character - no models, no GPU, no download. Those
+clips are not under this package's licence; see the repository LICENSE. The
+demo has
 buttons for the two paths that are easiest to get wrong: a speech queue, and a
 clip that fails to load.
 

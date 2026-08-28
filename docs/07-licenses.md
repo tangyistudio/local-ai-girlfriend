@@ -1,5 +1,11 @@
 # What you are allowed to do with these models
 
+> **Last checked: 2026-08-28.** Every claim below was re-verified against the
+> upstream LICENSE file, model card or repository on that date. Licences change
+> and model cards get edited, so a licence page without a date is a licence page
+> you cannot act on - including this one, once it is old enough.
+
+
 Nobody consolidates this, and it is the question that decides whether your
 project is a hobby or a business. Every row below was checked against the
 project's own LICENSE file, README and model card, with the link.
@@ -58,7 +64,8 @@ There is no LICENSE file. The heading over the open-source release is literally
 "Non Commercial Open-source Version". So you cannot fork the code commercially
 either - the restriction is broader than a weights restriction.
 
-Commercial weights are sold separately by Sync Labs as a paid API.
+Sync Labs sells a hosted API. No commercially-licensed weights are offered - 
+the commercial route is their service, not a licence for these files.
 
 This matters because Wav2Lip is also the cheapest option in VRAM. **"Run it on
 8 GB" and "build a product" point at different models.**
@@ -84,7 +91,11 @@ core/atomic_components/source2info.py:59   self.insightface_det = InsightFaceDet
 core/atomic_components/source2info.py:71   det, _ = self.insightface_det(img)
 ```
 
-Top-level import, constructed in `__init__`, called on every inference. There is
+Top-level import and constructed unconditionally in `__init__`, so the weights
+load on every run. The detector itself is called on the FIRST frame only -
+`if last_lmk is None`, after which the pipeline tracks landmarks instead. That
+narrows the mechanism and changes nothing about the licence: the files are
+shipped and loaded either way. There is
 no alternative detector wired in. The models ship inside a weights repository
 carrying an Apache-2.0 LICENSE that Ant Group is not in a position to grant over
 them.
@@ -144,8 +155,8 @@ uncomplicated part of the stack.
 
 ## GFPGAN: not Apache-2.0, and not unresolved either
 
-| Project | Reality |
-|---|---|
+| Project | Reality | Clean for commercial use |
+|---|---|---|
 | [GFPGAN](https://github.com/TencentARC/GFPGAN/blob/master/LICENSE) | Apache-2.0 **except** enumerated third-party components | ❌ **No** |
 
 Its LICENSE opens:

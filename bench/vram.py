@@ -237,7 +237,26 @@ def main():
     # so an error-path latency sat in the data file wearing the same
     # provenance tag as a real reading, and the docs say every row is tagged
     # with its provenance. Distinguish them.
-    ok = rec.get("http_status") is not None and 200 <= rec["http_status"] < 300
+    #
+    # ⚠️⚠️ ONLY A ROW THAT ATTEMPTED A REQUEST CAN HAVE FAILED ONE.
+    #
+    # The first version of this guard was `rec.get("http_status") is not None
+    # and 2xx`. A baseline makes no HTTP request and therefore carries no
+    # `http_status` at all, so that condition was False for every baseline ever
+    # recorded and stamped each of them "FAILED - not a measurement".
+    #
+    # It reached the committed evidence. Two rows in bench/results.json - the
+    # desktop baseline and the loaded reading that the 8 GB tier result is the
+    # difference between - carried that tag while the documents cited them as
+    # "recorded" and invited the reader to check the file. The repository's
+    # headline finding was stamped a failure by the repository's own tool, and
+    # a stranger's very first `vram.py baseline` would have been too.
+    #
+    # A guard that fails closed is right. A guard that fails closed on the
+    # wrong axis is worse than none, because it destroys good data quietly.
+    made_request = "http_status" in rec
+    ok = (not made_request) or (rec["http_status"] is not None
+                                and 200 <= rec["http_status"] < 300)
     rec["provenance"] = "first-party" if ok else "FAILED - not a measurement"
     if args.out:
         data = []

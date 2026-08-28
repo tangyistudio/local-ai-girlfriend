@@ -29,7 +29,7 @@
  * paying for itself, so take it out. docs/04-latency.md has the local numbers
  * that make it worth having on one consumer card.
  *
- * ⚠️ EVERY CLIP HERE - idle, filler and answer alike - is a render from the
+ * ⚠️ EVERY CLIP HERE - idle and answer alike - is a render from the
  * same lip-sync engine over a 124-frame base clip, with the audio padded to
  * exactly that length. Both halves of that matter and both were arrived at by
  * measuring a library that failed:
@@ -48,8 +48,14 @@
  *   clips has two different mouths in it and steps the jaw at every join
  *   between them.
  *
- * Measured across all 16 clips against the shared frame: whole frame 0.00-2.98,
- * mouth region 0.00-3.44, first and last. player/examples/check-clips.sh.
+ * Measured across all 18 clips, each against its OWN look's reference frame -
+ * the checker groups by filename prefix, because three looks are three pivot
+ * frames and they are not supposed to match. First frames land 0.00-6.6 worst
+ * block out of 255; last frames 7.4-8.1 for the rotation clips.
+ *
+ * Two checkers, measuring different things, neither a substitute for the
+ * other: check-clips.sh for alignment, check-mouth.py for whether a clip with
+ * no audio keeps its mouth shut.
  */
 
 // ⚠️ Resolved against THIS module's own URL, not against a base handed in by

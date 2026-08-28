@@ -18,11 +18,11 @@ WHAT IT COMPARES
 Numbers, not words. It pulls every numeric token out of both files and compares
 the multisets. That is deliberately crude, and crude is right here - a real
 parser would need to understand two languages of prose, and the thing we
-actually care about is "does 7,498 appear in both files the same number of
+actually care about is "does 1,234 appear in both files the same number of
 times".
 
 Normalisation handles the differences that are not drift:
-  - thousands separators: 7,498 and 7498 are the same number
+  - thousands separators: 1,234 and 1234 are the same number
   - full-width digits, which CJK input methods produce
   - trailing zeros in decimals: 2.40 and 2.4 are the same number
 
@@ -96,7 +96,7 @@ LINK_TARGET = re.compile(r"\]\([^)]*\)")
 
 
 def normalise(tok):
-    """Make '７,４９８' and '7498' compare equal, and '2.40' equal '2.4'."""
+    """Make '１,２３４' and '1234' compare equal, and '2.40' equal '2.4'."""
     tok = unicodedata.normalize("NFKC", tok)      # full-width -> ASCII
     tok = tok.replace(",", "").replace("，", "")
     if "." in tok:

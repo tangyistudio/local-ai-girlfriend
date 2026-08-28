@@ -4,7 +4,7 @@
 
 繁體中文版：[README.zh-TW.md](README.zh-TW.md)
 
-![Two looks of the demo character speaking](site/img/demo.gif)
+![The demo character speaking, two of her three looks](site/img/demo.gif)
 
 *Xiaoxian, the demo character. Both clips came out of the pipeline this
 repository documents, on one RTX A5000; sound, size controls and the rest of the
@@ -34,10 +34,11 @@ machine, with the script that produced it in `bench/`, and every claim we did
 
 **Components do not have a fixed size.** The same cloned-voice TTS held 5.1 GB
 on a 24 GB card and ran in 2.7 GB when we constrained the card to 8 GB - same
-output, 26% slower on short sentences and no slower on long ones. This breaks
+output, 18-26% slower on short sentences depending on the run, and no slower on
+long ones. This breaks
 the arithmetic every guide does, including our own first draft: we published
 "8 GB is impossible", then tested it and watched the whole stack run in
-**7,498 of 8,192 MiB**. The wrong prediction is still in the document, because
+**7,052-7,615 of 8,192 MiB**. The wrong prediction is still in the document, because
 it is the clearest argument we have against sizing a machine from someone
 else's numbers.
 
@@ -70,7 +71,7 @@ hands, you need a different model, and `docs/07-licenses.md` has the clean path.
 
 | Card | Configuration | Status |
 |---|---|---|
-| **8 GB** | Voice + lip-sync local, LLM remote | ✅ tested, 7,498 / 8,192 MiB |
+| **8 GB** | Voice + lip-sync local, LLM remote | ✅ tested, 7,052-7,615 / 8,192 MiB |
 | **16 GB** | Everything local, 8B at 32k context | ✅ tested at 32k; 16k suggested for headroom |
 | **24 GB** | Everything local, 8B at 32k, room to spare | ✅ tested directly |
 | **32 GB** | — | ⚠️ arithmetic only, we have no such card |
@@ -90,14 +91,14 @@ Full configurations and caveats: **[docs/01-tiers.md](docs/01-tiers.md)**
 |---|---|
 | `docs/` | The measured guide, 9 documents, English and Traditional Chinese |
 | `bench/` | The tools that produced every number in it |
-| `player/` | Seamless clip playback. Zero dependencies, 12 tests, runnable demo |
+| `player/` | Seamless clip playback. Zero dependencies, 18 tests, runnable demo |
 | `player/examples/` | A runnable demo, a generated clip library, and the script that verifies it |
 | `index.html`, `qa.html`, `site/` | The project pages. Static, bilingual, no build step |
 | `services/` | The service contract and the orchestration layer |
 | `scripts/` | Launch and supervision, with the failure modes designed out |
 
 **Run it locally** - the project page embeds the real player, and the clips are
-coloured shapes drawn by ffmpeg, so there is nothing to download and no GPU
+real renders of the demo character, so nothing needs downloading and no GPU
 involved:
 
 ```sh
@@ -188,8 +189,10 @@ product-specific - persona, business logic, character assets, billing - is
 excluded by design. What remains is the engineering.
 
 The starting point was [this Chinese teardown](https://www.cnblogs.com/ccsvip/p/22189506)
-of a self-hosted companion stack, which is where the "8 GB is enough" figure in
-circulation comes from. Our numbers differ from it in places; that is not a
+of a self-hosted companion stack. It is often cited for the "8 GB is enough"
+figure, and that is a misreading worth correcting: it lists 8 GB as a stated
+*minimum* in a min/recommended table, recommends 16 GB or more, and its own
+component budget totals about 17 GB. Our numbers differ from it in places; that is not a
 correction, it is a different stack measured on different hardware.
 
 ## Licence
