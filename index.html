@@ -241,7 +241,7 @@
 
     <div class="callout" style="margin-top:22px">
       <p><span data-l="en"><b>The clip library is where the architecture gets tested, and it failed
-        three times before it was shippable — and the checker still returns 1 on it.</b> Every clip here — idle and answer alike — is rendered by
+        five times before it was shippable — and the checker still returns 1 on it.</b> Every clip here — idle and answer alike — is rendered by
         the same lip-sync engine over a base clip that begins and ends on the pivot frame, with the
         audio padded to exactly that clip's length — most bases are <b>124</b> frames, three are
         <b>107</b>. Both halves matter. Padding is what makes a talking clip <em>end</em> on the
@@ -253,7 +253,7 @@
         makes the two families match: the engine regenerates the mouth on every frame including
         silence, and that generated mouth sits <b>6.22</b> from the untouched footage, so a library
         mixing the two steps the jaw at every join between them.</span>
-        <span data-l="zh"><b>片庫才是這套架構真正被檢驗的地方，而它在能出貨之前失敗了三次——而且檢查器到現在對它仍然回傳 1。</b>
+        <span data-l="zh"><b>片庫才是這套架構真正被檢驗的地方，而它在能出貨之前失敗了五次——而且檢查器到現在對它仍然回傳 1。</b>
         這裡每一支片——待機與答覆——都是同一套對嘴引擎在一支起訖都落在樞紐幀的底片上算出來的，
         音訊補到剛好等於那支底片的長度——多數底片是 <b>124</b> 幀，有三支是 <b>107</b> 幀。兩件事缺一不可。補長度決定講話片<em>停</em>在樞紐幀：引擎會從第 0 幀
         起算 <code>ceil(秒數 × fps)</code> 幀，不補就停在語音用完的那一格。前置靜音決定它<em>起</em>於
