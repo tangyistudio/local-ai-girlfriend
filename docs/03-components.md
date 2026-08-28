@@ -70,7 +70,10 @@ The decision that matters is **realtime factor**, not visual quality.
 | Above 1.0 | playback outruns generation | no amount of pipelining helps; every sentence is a wait |
 
 We measured a diffusion model at **5.08x realtime** and a wav2lip-class pipeline
-at **0.37x** - a 13.3x difference that also happened to have a *clearer* mouth
+at **0.37x** - a 13.7x difference on those two figures (the wall-clock pair,
+60 / 4.5, gives 13.3; docs/04-latency.md carries both and the rule that where
+a headline and its table disagree, the table wins) that also happened to have
+a *clearer* mouth
 (58% vs 34%) and slightly lower jitter. The intuition that the slower, more
 modern model must look better did not survive measurement.
 

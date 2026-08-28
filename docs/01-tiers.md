@@ -33,10 +33,10 @@ Measured on this box, warm, from `docs/00-hardware.md`:
 | Windows desktop | **1.9 - 3.4 GB** | measured twice hours apart; depends what is open |
 | Lip-sync service | **~2.4 GB** | wav2lip-class, 256px |
 | Cloned-voice TTS | **~5.1 GB** | the single most expensive non-LLM component |
-| Qwen3 8B @ 4k ctx | **5.11 GB** | |
+| Qwen3 8B @ 4k ctx | **5.11 GiB** (5,233 MiB) | |
 | Qwen3 8B @ 8k ctx | 5.74 GB | |
 | Qwen3 8B @ 16k ctx | 6.89 GB | |
-| Qwen3 8B @ 32k ctx | **9.54 GB** | +4.4 GB over 4k - an **87% increase** |
+| Qwen3 8B @ 32k ctx | **9.54 GiB** (9,764 MiB) | +4.43 GiB over 4k - an **87% increase** |
 
 ⚠️ **These are upper bounds, not requirements.** Every figure above was measured
 with 24 GB available, and these components shrink when the card is smaller - the

@@ -90,7 +90,16 @@ while true; do
     # Exponential backoff, capped. Without this, a service that cannot start
     # because the card is full gets retried forever and holds more of it each
     # time.
-    backoff=$(( INTERVAL * (1 << (fails - 1)) ))
+    # ⚠️ CAP THE SHIFT, not just the result. `fails` increments on every poll,
+    # not on every restart, so at INTERVAL=20 it reaches 60 within 20 minutes.
+    # `1 << 59` overflows a signed 64-bit shell integer to a NEGATIVE number,
+    # the `-gt 600` cap then never fires, and the backoff this block exists to
+    # provide silently becomes no backoff at all - the fork bomb with a timer
+    # the header of this file warns about, arriving exactly when a service has
+    # been failing long enough to matter.
+    shift_n=$(( fails - 1 ))
+    [ "$shift_n" -gt 16 ] && shift_n=16
+    backoff=$(( INTERVAL * (1 << shift_n) ))
     [ "$backoff" -gt 600 ] && backoff=600
     if [ "$fails" -gt 1 ]; then
       last=$(cat "$STATE_DIR/$name.last" 2>/dev/null || echo 0)

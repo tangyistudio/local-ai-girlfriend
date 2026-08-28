@@ -26,7 +26,7 @@ stage.setSpeakQueue([clipA, clipB]);   // plays each exactly once, then idles
 stage.interrupt();                      // drop the queue, fade back
 ```
 
-Zero dependencies. React is optional.
+Zero dependencies. No framework wrapper ships.
 
 ## Why the code is so heavily commented
 

@@ -154,7 +154,7 @@ worse than the flash it was added to prevent.
 ## The implementation
 
 This describes the approach; `player/` implements it. Framework-agnostic, zero
-dependencies, React wrapper optional. `player/examples/demo.html` runs it
+dependencies, No framework wrapper ships; the class is framework-agnostic. `player/examples/demo.html` runs it
 against a generated clip library that ships with it.
 
 ⚠️ Two defects in this list were found by **running that demo**, not by reading
@@ -172,7 +172,6 @@ The parts to get right, in order of how much they cost to discover:
 4. Skip the whole handover when the next clip is the current clip.
 5. Verify the event source before acting on `ended`.
 6. Put a still frame behind everything as a backstop.
-
 
 ## The black flash, and why reading the code did not find it
 

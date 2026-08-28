@@ -31,8 +31,16 @@ NAME="${1:?usage: start-service.sh <name>}"
 An empty secret turns the auth check into a no-op and publishes your GPU.}"
 
 case "$NAME" in
-  tts)     CMD="${TTS_CMD:?TTS_CMD not set}" ; URL="${TTS_URL:-http://127.0.0.1:7896}" ;;
-  lipsync) CMD="${LIPSYNC_CMD:?LIPSYNC_CMD not set}" ; URL="${LIPSYNC_URL:-http://127.0.0.1:7894}" ;;
+  tts)     CMD="${TTS_CMD:?TTS_CMD not set}" ; URL="${TTS_URL:-http://127.0.0.1:7896}"
+           PROBE=/tts ;;
+  lipsync) CMD="${LIPSYNC_CMD:?LIPSYNC_CMD not set}" ; URL="${LIPSYNC_URL:-http://127.0.0.1:7894}"
+           # ⚠️ NOT /tts. services/CONTRACT.md gives this service /speak and
+           # /lipsync; probing /tts got a 404, which is neither 401 nor 403 nor
+           # 000, so the case below fell through to "answered with no auth
+           # header" and killed the service it had just started. The auth probe
+           # has to hit a route the service actually serves or it tests nothing
+           # and destroys everything.
+           PROBE=/speak ;;
   *) echo "unknown service: $NAME"; exit 1 ;;
 esac
 
@@ -50,11 +58,14 @@ for _ in $(seq 1 60); do
   sleep 2
 done
 
-CODE="$(curl -s -o /dev/null -w '%{http_code}' -m 10 -X POST "$URL/tts" \
+CODE="$(curl -s -o /dev/null -w '%{http_code}' -m 10 -X POST "$URL$PROBE" \
         -H 'Content-Type: application/json' -d '{"text":"x"}' 2>/dev/null || echo 000)"
 case "$CODE" in
   401|403) echo "$NAME up, auth verified (unauthenticated request got $CODE)" ;;
-  000)     echo "$NAME up, could not verify auth (endpoint unreachable)" ;;
+  000)     echo "!! $NAME up but $PROBE is unreachable - auth NOT verified. Stopping it."
+           kill "$PID" 2>/dev/null; exit 1 ;;
+  404)     echo "!! $NAME does not serve $PROBE. Auth not verified; see CONTRACT.md. Stopping it."
+           kill "$PID" 2>/dev/null; exit 1 ;;
   *)       echo "!! $NAME ANSWERED $CODE WITH NO AUTH HEADER. Stopping it."
            kill "$PID" 2>/dev/null; exit 1 ;;
 esac

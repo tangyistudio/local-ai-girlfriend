@@ -218,7 +218,11 @@ def summarise(label, rows):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--out", default=os.path.join(HERE, "results.json"))
+    # ⚠️ NOT results.json. That file is the committed evidence behind the docs,
+    # and README tells every reader to run this command - so the default used to
+    # append a stranger's hardware into the repository's own dataset. The
+    # .local.json name is what .gitignore already covers.
+    p.add_argument("--out", default=os.path.join(HERE, "results.local.json"))
     p.add_argument("--only", action="append", default=[])
     p.add_argument("--repeats", type=int, default=3)
     p.add_argument("--secret", default=os.environ.get("GPU_SERVICE_SECRET", ""))

@@ -33,6 +33,15 @@ something it can.
 | 24 GB | **Comfortable.** Or a 27B, at a quarter of the token rate. | tested directly |
 | 32 GB | Not tested. We do not have the hardware. | arithmetic only |
 
+⚠️ **The 27B row names a model that does not exist.** It was recorded as
+"Qwen3.8 27B"; there is no Qwen3.8, and Qwen3 ships no 27B dense variant. The
+reading itself is real - the request returned 200 and the card held what it
+held - but nobody can reproduce it without knowing what was loaded, so treat
+this row as an upper-bound anecdote for a 27B-class model and not as a
+measurement of anything specific. It is left in because deleting an
+inconvenient row is worse than labelling one.
+
+
 See `docs/01-tiers.md` for the configuration at each tier and what we did and
 did not verify.
 
@@ -209,7 +218,7 @@ running.
 | Model | On disk | VRAM delta | Ollama reports | Cold load | **Throughput** |
 |---|---|---|---|---|---|
 | Qwen3 8B | 5.23 GB | **+5.9 GB peak / ~5.35 GB resident** | 5.6 GB, 100% GPU | 15.6 s | **86.3 tok/s** |
-| Qwen3.8 27B | 17.74 GB | **+11.5 GB** | 17 GB, 100% GPU | 16.5 s * | **19.9 tok/s** |
+| *unidentified 27B-class model* | 17.74 GB | **+11.5 GB** | 17 GB, 100% GPU | 16.5 s * | **19.9 tok/s** |
 
 All first-party, ctx 4096, measured with the TTS and lip-sync services running.
 

@@ -1,6 +1,8 @@
 # Demo clips
 
-Eighteen clips of an AI-generated character, three looks, at 432px wide.
+Eighteen clips of Xiaoxian, three looks, at 432px wide. She is a generated
+likeness derived from a real person and is NOT under the code licence - the
+provenance section at the bottom is the binding statement, not this line.
 
   9  rotation clips   silent, the idle loop the player returns to
   9  answer clips     three canned questions x three looks

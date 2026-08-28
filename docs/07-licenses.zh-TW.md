@@ -111,8 +111,8 @@ MuseTalk 自己的條款是這裡最寬鬆的——MIT 程式碼，以及：
 
 ## GFPGAN：不是 Apache-2.0，也不是「未解」
 
-| 專案 | 實際情況 |
-|---|---|
+| 專案 | 實際情況 | 可否商用 |
+|---|---|---|
 | [GFPGAN](https://github.com/TencentARC/GFPGAN/blob/master/LICENSE) | Apache-2.0 **除了**列舉出來的第三方元件 | ❌ **不行** |
 
 它的 LICENSE 開頭就寫：

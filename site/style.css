@@ -257,7 +257,6 @@ body.demo-full { overflow: hidden; }
 }
 .bubble.you { align-self: flex-end; background: #22314a; color: var(--bright); border-bottom-right-radius: 5px; }
 .bubble.her { align-self: flex-start; background: #171d29; border: 1px solid var(--line); border-bottom-left-radius: 5px; }
-.bubble.thinking { color: var(--dim); font-style: italic; }
 .chat-ask { display: flex; flex-direction: column; gap: 7px; }
 .chat-ask button { text-align: left; }
 .chat-ask button:disabled { opacity: .45; cursor: default; }

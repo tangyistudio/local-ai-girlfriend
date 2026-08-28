@@ -64,7 +64,7 @@ There is no LICENSE file. The heading over the open-source release is literally
 "Non Commercial Open-source Version". So you cannot fork the code commercially
 either - the restriction is broader than a weights restriction.
 
-Sync Labs sells a hosted API. No commercially-licensed weights are offered - 
+Sync Labs sells a hosted API. No commercially-licensed weights are offered -
 the commercial route is their service, not a licence for these files.
 
 This matters because Wav2Lip is also the cheapest option in VRAM. **"Run it on

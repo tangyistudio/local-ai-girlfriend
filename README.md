@@ -201,7 +201,6 @@ MIT for the code in this repository. The models it measures have their own
 terms, several of which restrict commercial use - see
 [docs/07-licenses.md](docs/07-licenses.md).
 
-
 ## Our own checker fails on our own clips, and we left it that way
 
     bash player/examples/check-clips.sh   # exits 1

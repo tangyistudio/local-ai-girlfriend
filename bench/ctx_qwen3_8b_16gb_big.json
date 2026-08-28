@@ -9,7 +9,7 @@
       "loaded_max": 21949,
       "delta_mib": 5366,
       "load_s": 3.72,
-      "ollama_processor": "GB 100%",
+      "ollama_processor": "CORRUPT - see bench/ctx_scale.py, slice bug dropped the GPU/CPU word",
       "eval_count": 16
     },
     {
@@ -20,7 +20,7 @@
       "loaded_max": 22361,
       "delta_mib": 6924,
       "load_s": 4.16,
-      "ollama_processor": "GB 100%",
+      "ollama_processor": "CORRUPT - see bench/ctx_scale.py, slice bug dropped the GPU/CPU word",
       "eval_count": 16
     }
   ]

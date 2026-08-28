@@ -80,10 +80,10 @@ export function mountDemo({ els }) {
 
   // ---- transcript ---------------------------------------------------------
 
-  function bubble(who, en, zh, cls) {
+  function bubble(who, en, zh) {
     if (!els.chatLog) return null;
     const row = document.createElement('div');
-    row.className = `bubble ${who}` + (cls ? ` ${cls}` : '');
+    row.className = `bubble ${who}`;
     const a = document.createElement('span');
     a.setAttribute('data-l', 'en');
     a.textContent = en;

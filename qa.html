@@ -90,7 +90,9 @@
 
     <div class="qa">
       <h3><span data-l="en">Can I sell something built on this?</span><span data-l="zh">我可以拿這個做生意嗎？</span></h3>
-      <p><span data-l="en">The code here is MIT. The models are the problem, and the honest answer
+      <p><span data-l="en">The code here is MIT <b>plus one condition — if you use it, say so</b> (see LICENSE; a visible
+        Tangyi Studio credit, no permission needed, nothing to pay), and separately the demo
+        character and her footage are not covered by that grant at all. The code here is MIT. The models are the problem, and the honest answer
         is that <b>we do not have a fully verified commercial lip-sync path to recommend</b>.</span>
         <span data-l="zh">這裡的程式碼是 MIT。問題出在模型，而誠實的答案是：<b>我們沒有一條完整查證過的商用對嘴路線可以推薦。</b></span></p>
       <p><span data-l="en">Of the four common options, three carry non-commercial constraints: one
@@ -144,11 +146,12 @@
     <div class="qa">
       <h3><span data-l="en">What actually makes it feel fast?</span><span data-l="zh">到底什麼讓它感覺快？</span></h3>
       <p><span data-l="en">In order of how much they move the number: pick a lip-sync model that runs
-        faster than realtime (<b>13.3×</b> between the two we measured); split the reply and
+        faster than realtime (<b>13.3–13.7×</b> between the two we measured, depending
+        on whether you compare wall clock or realtime factor); split the reply and
         pipeline per sentence (<b>6×</b> on time-to-first-clip); stop re-encoding the reference
         voice on every call (11–16 s per sentence down to 2.7–3.4 s); warm every model early
         (56 s of cold start).</span>
-        <span data-l="zh">依對數字的影響排序：挑一個比即時更快的對嘴模型（我們量的兩個差 <b>13.3 倍</b>）；切開回覆、逐句管線化（開口前的等待快 <b>6 倍</b>）；停止每次呼叫都重新編碼參考聲音（每句從 11–16 秒降到 2.7–3.4 秒）；提早暖機每一個模型（那是 56 秒的冷啟動）。</span></p>
+        <span data-l="zh">依對數字的影響排序：挑一個比即時更快的對嘴模型（我們量的兩個差 <b>13.3–13.7 倍</b>，看你比的是牆鐘還是實時倍率）；切開回覆、逐句管線化（開口前的等待快 <b>6 倍</b>）；停止每次呼叫都重新編碼參考聲音（每句從 11–16 秒降到 2.7–3.4 秒）；提早暖機每一個模型（那是 56 秒的冷啟動）。</span></p>
       <p><span data-l="en">Then stop optimising. What remains is real computation, and the move is to
         cover it — pre-rendered reaction clips, so the wait becomes part of the interaction
         instead of a spinner.</span>
@@ -170,12 +173,20 @@
     </div>
 
     <div class="qa">
-      <h3><span data-l="en">Why shapes instead of a character in the demo?</span><span data-l="zh">demo 為什麼是方塊不是角色？</span></h3>
-      <p><span data-l="en">Shipping character footage means shipping a likeness, and shipping the
-        weights to generate one means shipping the licence problem. Neither is needed to
-        demonstrate the point — and shapes make the invariant <em>visible</em> in a way footage
-        does not. You can see that every clip departs from and returns to the same arrangement.</span>
-        <span data-l="zh">出貨角色影片等於出貨肖像，出貨生成它的權重等於出貨授權問題。兩者都不是示範這件事所必需——而方塊讓那個不變條件<em>看得見</em>，影片做不到。你可以直接看出每一支片都從同一個排列出發、又回到它。</span></p>
+      <h3><span data-l="en">Why ship character footage at all?</span><span data-l="zh">為什麼要附上角色影片？</span></h3>
+      <p><span data-l="en">An earlier version of this demo used coloured shapes, on the reasoning that
+        shipping footage means shipping a likeness and nothing is lost by abstracting it. That was
+        wrong in the way that matters: the defects this player exists to prevent — a jaw that steps
+        at a join, a mouth that moves with no sound, a black frame between clips — are invisible on
+        a shape and obvious on a face. Every one of them was found on footage after passing on
+        shapes. A demo that cannot fail the way the real thing fails is not evidence.<br><br>
+        So the footage ships, and the likeness question is answered by the licence rather than by
+        avoidance: Xiaoxian is a generated likeness derived from a real person who owns it, she is
+        © Tangyi Studio with all rights reserved, and she is carved out of the code licence
+        explicitly. The model weights are a separate matter and are <em>not</em> shipped — those
+        are yours to obtain, under whatever terms the licence map records.</span>
+        <span data-l="zh">這個 demo 早期版本用的是彩色方塊，理由是「出貨影片等於出貨肖像，抽象化不會損失什麼」。那個推論在最要緊的地方是錯的：這個播放器存在要防的那些缺陷——接點上跳一下的下巴、沒有聲音卻在動的嘴、片段之間的黑幀——在方塊上看不出來，在一張臉上一目了然。而它們每一個都是在方塊上通過檢查之後、才在真實影像上被抓到的。<strong>一個不會用真實方式失敗的 demo，不是證據。</strong><br><br>
+        所以影片照樣附上，而肖像問題用授權來回答、不用迴避來回答：小嫻是從一位真人衍生出來的生成肖像、權利屬於那個人，她是 © Tangyi Studio 保留一切權利，並且被明確排除在程式碼授權之外。模型權重是另一回事，而且<em>沒有</em>附上——那要你自己取得，依授權地圖上記載的條款。</span></p>
     </div>
   </div>
 </section>

@@ -50,8 +50,15 @@
  *
  * Measured across all 18 clips, each against its OWN look's reference frame -
  * the checker groups by filename prefix, because three looks are three pivot
- * frames and they are not supposed to match. First frames land 0.00-6.6 worst
- * block out of 255; last frames 7.4-8.1 for the rotation clips.
+ * frames and they are not supposed to match. First frames land 0.00-6.61
+ * worst block out of 255.
+ *
+ * ⚠️ Last frames split BY LOOK, not by clip type, and quoting one range for
+ * the library hides that. Two looks' rotation clips land 7.38-8.09; the
+ * third lands 20.03-22.64 and takes its answer clips with it, which is why
+ * check-clips.sh exits 1 on this library. MANIFEST.md has the per-look table
+ * and the three-source experiment showing that look cannot be fixed by
+ * choosing different source clips.
  *
  * Two checkers, measuring different things, neither a substitute for the
  * other: check-clips.sh for alignment, check-mouth.py for whether a clip with

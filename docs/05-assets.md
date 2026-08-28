@@ -244,7 +244,6 @@ Anything failing 1 is unusable. Anything failing 4 will look like the character
 is talking to themselves. 2 and 3 determine which layer of the playback rotation
 the clip belongs to, which is `06-playback.md`.
 
-
 ## Rendering the library, and the three ways it was wrong first
 
 Everything above is about *choosing* clips. This section is about *making* them,
@@ -339,7 +338,6 @@ So this library is played with a 120 ms dissolve rather than a hard cut. State
 the purchase plainly: the amplitude buys mouth movement and costs seam, and the
 dissolve covers the seam.
 
-
 ### Round 5: the mouth that moved without a sound
 
 A rotation clip carries no audio. If the mouth moves in one, the character is
@@ -393,7 +391,6 @@ stands - and the answer starts in the same second as the click.
 The general rule, which is worth more than the fix: **a filler is worth exactly
 as much as the wait it hides.** It is a good answer to 11.9 s on one consumer
 card. It is a cost with no benefit anywhere the wait is not there.
-
 
 ### And one thing that could not be fixed, tested three ways
 

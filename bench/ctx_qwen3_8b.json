@@ -9,7 +9,7 @@
       "loaded_max": 12288,
       "delta_mib": 5233,
       "load_s": 3.17,
-      "ollama_processor": "GB 100%",
+      "ollama_processor": "CORRUPT - see bench/ctx_scale.py, slice bug dropped the GPU/CPU word",
       "eval_count": 16
     },
     {
@@ -20,7 +20,7 @@
       "loaded_max": 12503,
       "delta_mib": 5874,
       "load_s": 3.42,
-      "ollama_processor": "GB 100%",
+      "ollama_processor": "CORRUPT - see bench/ctx_scale.py, slice bug dropped the GPU/CPU word",
       "eval_count": 16
     },
     {
@@ -31,7 +31,7 @@
       "loaded_max": 13639,
       "delta_mib": 7051,
       "load_s": 3.41,
-      "ollama_processor": "GB 100%",
+      "ollama_processor": "CORRUPT - see bench/ctx_scale.py, slice bug dropped the GPU/CPU word",
       "eval_count": 16
     },
     {
@@ -42,7 +42,7 @@
       "loaded_max": 16348,
       "delta_mib": 9764,
       "load_s": 3.41,
-      "ollama_processor": "GB 100%",
+      "ollama_processor": "CORRUPT - see bench/ctx_scale.py, slice bug dropped the GPU/CPU word",
       "eval_count": 16
     }
   ]

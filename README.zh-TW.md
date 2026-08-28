@@ -139,7 +139,6 @@ python bench/ctx_scale.py --model qwen3:8b --ctx 4096 8192 16384 32768
 
 本 repo 的程式碼採 MIT。它所量測的模型各有自己的條款，其中好幾個限制商業使用——見 [docs/07-licenses.zh-TW.md](docs/07-licenses.zh-TW.md)。
 
-
 ## 我們自己的檢查器在自己的片庫上是紅的，而我們讓它保持紅的
 
     bash player/examples/check-clips.sh   # exit 1

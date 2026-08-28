@@ -253,7 +253,7 @@
         silence, and that generated mouth sits <b>6.22</b> from the untouched footage, so a library
         mixing the two steps the jaw at every join between them.</span>
         <span data-l="zh"><b>片庫才是這套架構真正被檢驗的地方，而它在通過之前失敗了三次。</b>
-        這裡每一支片——待機、墊詞、答覆——都是同一套對嘴引擎在一支 <b>124</b> 幀的底片上算出來的，
+        這裡每一支片——待機與答覆——都是同一套對嘴引擎在一支 <b>124</b> 幀的底片上算出來的，
         音訊補到剛好等於底片長度。兩件事缺一不可。補長度決定講話片<em>停</em>在樞紐幀：引擎會從第 0 幀
         起算 <code>ceil(秒數 × fps)</code> 幀，不補就停在語音用完的那一格。前置靜音決定它<em>起</em>於
         樞紐幀，否則第 0 幀已經帶著第一個音素的嘴型——量在嘴部區域是 <b>5.9</b>（滿分 255），而整幀
