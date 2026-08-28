@@ -198,6 +198,29 @@ MIT for the code in this repository. The models it measures have their own
 terms, several of which restrict commercial use - see
 [docs/07-licenses.md](docs/07-licenses.md).
 
+
+## Our own checker fails on our own clips, and we left it that way
+
+    bash player/examples/check-clips.sh   # exits 1
+    python player/examples/check-mouth.py 'player/examples/clips/*_still.mp4'         --model face_landmarker.task      # exits 0
+
+The pivot checker reports `ENDS ELSEWHERE` for one of the three looks. Its last
+frames sit 20 to 22 out of 255 from the frame its clips start on, where the
+other two looks sit at 12.6. By the tool's own rule that is a defect, and the
+tool says so.
+
+It is real, it is bounded, and the 120 ms dissolve the player uses covers it.
+The cause was chased and is recorded in `docs/05-assets.md`: the drift is added
+by the lip-sync generator at the end of a sequence, it scales with mouth
+amplitude, and rendering the same sentence over three different sources for
+that look produced 21.9, 20.0 and 23.5 - so it follows the face, not the source.
+The engine's own expression fade made it worse and trimming to the best of the
+last frames recovered almost nothing.
+
+The threshold was not moved to make this pass. A measurement tool tuned until
+your own data clears it measures nothing, and this repository exists because
+that is what most published numbers are worth.
+
 ---
 
 ## Built by Tangyi Studio

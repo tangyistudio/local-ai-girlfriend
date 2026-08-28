@@ -139,6 +139,23 @@ python bench/ctx_scale.py --model qwen3:8b --ctx 4096 8192 16384 32768
 
 本 repo 的程式碼採 MIT。它所量測的模型各有自己的條款，其中好幾個限制商業使用——見 [docs/07-licenses.zh-TW.md](docs/07-licenses.zh-TW.md)。
 
+
+## 我們自己的檢查器在自己的片庫上是紅的，而我們讓它保持紅的
+
+    bash player/examples/check-clips.sh   # exit 1
+    python player/examples/check-mouth.py 'player/examples/clips/*_still.mp4'         --model face_landmarker.task      # exit 0
+
+樞紐幀檢查器對三套外觀中的一套回報 `ENDS ELSEWHERE`。那套的尾幀離它自己片子起始的
+那一格 20 到 22（滿分 255），另外兩套是 12.6。照工具自己的規則那就是缺陷，工具也照實說了。
+
+它是真的、有界的，而播放器用的 120 ms 溶接蓋得掉。成因追過了，記在 `docs/05-assets.md`：
+漂移是對嘴引擎在序列末端加上去的，會隨嘴部幅度放大，而同一句話在那套外觀的三種不同來源
+上各算一次得到 21.9、20.0、23.5——所以它跟著那張臉走，不跟著來源走。
+引擎自己的表情淡出讓它更糟，收在最後幾幀裡最好的那一格也幾乎救不回什麼。
+
+**門檻沒有為了讓它通過而調動。** 一個被調到剛好讓自己的資料過關的量測工具，什麼也沒量到；
+而這個 repo 存在的理由，正是因為多數公開數字就是那種東西。
+
 ---
 
 ## 由 Tangyi Studio 製作
