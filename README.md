@@ -45,7 +45,10 @@ else's numbers.
 **The expensive part is the voice, not the video.** People budget for the
 lip-sync model. At 5.1 GB the cloned-voice TTS costs more than twice the
 lip-sync service (2.4 GB), and speech synthesis is where the user's waiting
-time goes: 11.9 s end to end for a sentence, of which lip-sync is 1.75 s.
+time goes: 11.9 s end to end for a sentence against 1.75 s once speech is
+cached. ⚠️ Both are session figures - measured here, in no data file - and the
+cold number's own breakdown does not close; docs/04-latency.md holds the
+unresolved gap.
 
 **Context costs almost as much as the model.** Going from Ollama's 4096-token
 default to a 32k window increases an 8B model's footprint by **87%** (+4.42 GiB).
@@ -204,7 +207,10 @@ correction, it is a different stack measured on different hardware.
 
 ## Licence
 
-MIT for the code in this repository. The models it measures have their own
+MIT **plus one added term** for the code in this repository - a mandatory
+visible credit to Tangyi Studio, spelled out in the "Built by Tangyi Studio"
+section below and in LICENSE. Not stock MIT; a scanner told "MIT" is told
+something false, which is why player/package.json says SEE LICENSE instead. The models it measures have their own
 terms, several of which restrict commercial use - see
 [docs/07-licenses.md](docs/07-licenses.md).
 
@@ -219,7 +225,10 @@ two. Measured against each look's own reference frame, the worst last-frame
 blocks run 20.03-23.03 for that look and 7.38-18.62 for the other two. By the tool's own rule that is a defect, and the
 tool says so.
 
-It is real, it is bounded, and the 120 ms dissolve the player uses covers it.
+It is real, it is bounded, and the 120 ms dissolve the demo plays it with
+covers it. (That dissolve is a per-library override, not the player's default -
+the shipped defaults are a hard cut between aligned library clips and 200 ms
+after speech; site/demo.js documents why this library gets the override.)
 The cause was chased and is recorded in `docs/05-assets.md`: the drift is added
 by the lip-sync generator at the end of a sequence, it scales with mouth
 amplitude, and rendering the same sentence over three different sources for

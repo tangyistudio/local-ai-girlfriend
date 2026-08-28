@@ -80,8 +80,11 @@ Measured on this box unless the row says otherwise:
 
 An audit of this page found that the figures hardest to obtain were exactly the
 ones with no file behind them - the manual ballast bookkeeping, the throughput
-runs, the end-to-end timings. Those are now labelled, because "we measured it"
-and "you can check it" are different claims:
+runs, the end-to-end timings. Most are now labelled, because "we measured it"
+and "you can check it" are different claims. ⚠️ Not all: the end-to-end latency
+table further down still has no file behind it and says so at the table, and a
+later audit found this very sentence claiming more coverage than existed - so
+where a table lacks a provenance column, assume **session** at best:
 
 | Label | Means |
 |---|---|
@@ -356,6 +359,13 @@ alone rather than end-to-end.
 | Lip-sync, long | 3.12 s | 2.98 - 3.31 | 4.26 MB video |
 | **End to end, cold** | **11.9 s** | single run | 2.33 MB video |
 | **End to end, TTS cached** | **1.75 s** | 1.62 - 1.91 | 2.33 MB video |
+
+⚠️ **Both end-to-end rows are session figures**: measured on this machine, in no
+data file, unverifiable by you. `bench/results.json` has no end-to-end rows -
+and note it does contain a `wall_s` of 11.937 that is a *TTS probe under
+ballast*, not this number; finding it by grep and treating it as confirmation
+would be an error. The cold row's own breakdown does not close either - see the
+unresolved-gap section of `docs/04-latency.md` before building on it.
 
 The last two rows are the numbers a user actually waits for. "Cold" is one
 sentence with nothing cached: text in, finished talking-head video out. "TTS

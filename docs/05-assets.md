@@ -289,8 +289,9 @@ Three things together, and removing any one of them brings the defect back.
 **Pad the audio to the base clip's length.** The engine renders
 `ceil(audio_seconds * fps)` frames of the base starting at frame 0. The bases
 begin and end on the pivot, so the render returns to the pivot only when it runs
-the base to its end. Here the bases are 124 frames and the audio is padded to
-match.
+the base to its end. Here fifteen of the eighteen bases are 124 frames and
+three are 107 - the requirement is pivot-locked and long enough, not a fixed
+length - and the audio is padded to each base's own length.
 
 This also retires a constraint the source project had documented as permanent.
 Its guidance was that lip-sync source clips must be *low motion*, because an
@@ -334,7 +335,11 @@ the base's face. Ending each clip on whichever of its last 25 frames sits
 closest to the reference recovered almost nothing, 22.2 to 19.9 - which is how
 you know the whole tail drifted rather than one frame being bad.
 
-So this library is played with a 120 ms dissolve rather than a hard cut. State
+So the demo plays this library with a 120 ms dissolve rather than a hard cut -
+an override of the player's defaults (0 ms between aligned library clips,
+200 ms after speech), justified in site/demo.js by the misalignment measured
+above. At the 4.6/255 alignment docs/06-playback.md assumes, the hard cut is
+still correct and this dissolve would be the mistake. State
 the purchase plainly: the amplitude buys mouth movement and costs seam, and the
 dissolve covers the seam.
 

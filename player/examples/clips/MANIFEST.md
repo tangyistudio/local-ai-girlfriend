@@ -13,8 +13,9 @@ filename prefix is also the group key the checkers use.
 ⚠️ **The answers are pre-rendered.** They were produced in advance by the
 pipeline this repository documents and saved as files. Clicking a question
 plays a video that already existed - so the demo shows what the output looks
-like and how playback behaves, and shows nothing at all about speed. The real
-figure for generating one sentence on the card benchmarked here is 11.9 s.
+like and how playback behaves, and shows nothing at all about speed. Generating
+one sentence on the card benchmarked here took 11.9 s - a session figure with an
+unresolved breakdown; see docs/04-latency.md before quoting it.
 
 ## There are no filler clips here, and that is the point
 
