@@ -181,13 +181,19 @@ shrink to fit; a sum of upper bounds is not a requirement. What is measured is
 that it ran.
 
 **A 27B fits, but you pay for it in speed.** With the edge services running,
-loading Qwen3.8 27B took the card to 22,528 of 23,028 MiB - 97.8%. It ran, and
-we measured it:
+loading a 27B-class model took the card to 22,528 of 23,028 MiB - 97.8%.
+
+⚠️ We cannot tell you which model. It was recorded under a name that does not
+correspond to any released model, so the reading is real but unreproducible -
+see docs/00-hardware.md. Read the row as an upper-bound anecdote for that size
+class, not as a measurement of a specific model.
+
+It ran, and we measured it:
 
 | Model | Throughput | Cold load |
 |---|---|---|
 | Qwen3 8B | **86.3 tok/s** | 15.6 s |
-| Qwen3.8 27B | **19.9 tok/s** | 16.5 s (load only) |
+| *unidentified 27B-class model* | **19.9 tok/s** | 16.5 s (load only) |
 
 **4.3x slower per token.** For a companion that is meant to answer in
 conversational time, that is the difference between a reply arriving as you

@@ -16,7 +16,9 @@ own eval_count and eval_duration rather than wall time, which would fold in
 prompt processing and model load.
 
 Run it once with the card free and once under `ballast.py`. If the rate holds,
-the config fits. If it collapses, you are paging, whatever the tools say.
+the config fits. If it collapses, something is wrong with the fit, whatever the tools say - but
+note this tool cannot tell you WHAT, and docs/00-hardware.md records one case
+where throughput did not collapse and the cause was never established.
 
     python tok_rate.py --model qwen3:8b --ctx 32768 --predict 200
 """

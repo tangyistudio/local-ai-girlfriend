@@ -213,9 +213,10 @@ terms, several of which restrict commercial use - see
     bash player/examples/check-clips.sh   # exits 1
     python player/examples/check-mouth.py 'player/examples/clips/*_still.mp4'         --model face_landmarker.task      # exits 0 - but see below
 
-The pivot checker reports `ENDS ELSEWHERE` for one of the three looks. Its last
-frames sit 20 to 22 out of 255 from the frame its clips start on, where the
-other two looks sit at 12.6. By the tool's own rule that is a defect, and the
+The pivot checker reports `ENDS ELSEWHERE` for **8 of the 18 clips, across all
+three looks** - all six of one look, plus one answer clip from each of the other
+two. Measured against each look's own reference frame, the worst last-frame
+blocks run 20.03-23.03 for that look and 7.38-18.62 for the other two. By the tool's own rule that is a defect, and the
 tool says so.
 
 It is real, it is bounded, and the 120 ms dissolve the player uses covers it.

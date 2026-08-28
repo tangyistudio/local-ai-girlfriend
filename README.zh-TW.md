@@ -146,8 +146,9 @@ python bench/ctx_scale.py --model qwen3:8b --ctx 4096 8192 16384 32768
     bash player/examples/check-clips.sh   # exit 1
     python player/examples/check-mouth.py 'player/examples/clips/*_still.mp4'         --model face_landmarker.task      # exit 0 —— 但見下方
 
-樞紐幀檢查器對三套外觀中的一套回報 `ENDS ELSEWHERE`。那套的尾幀離它自己片子起始的
-那一格 20 到 22（滿分 255），另外兩套是 12.6。照工具自己的規則那就是缺陷，工具也照實說了。
+樞紐幀檢查器對 **18 支裡的 8 支**回報 `ENDS ELSEWHERE`，而且**三套外觀都有**——
+其中一套六支全中，另外兩套各中一支答覆片。以各套外觀自己的基準幀去量，
+那一套的尾幀最差區塊落在 20.03–23.03，另外兩套是 7.38–18.62。照工具自己的規則那就是缺陷，工具也照實說了。
 
 它是真的、有界的，而播放器用的 120 ms 溶接蓋得掉。成因追過了，記在 `docs/05-assets.md`：
 漂移是對嘴引擎在序列末端加上去的，會隨嘴部幅度放大，而同一句話在那套外觀的三種不同來源

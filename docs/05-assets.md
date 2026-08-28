@@ -247,7 +247,7 @@ the clip belongs to, which is `06-playback.md`.
 ## Rendering the library, and the five rounds it took
 
 Everything above is about *choosing* clips. This section is about *making* them,
-and it is the part that took four rounds to get right. Each round produced a
+and it is the part that took five rounds to get right. Each round produced a
 library that passed the checks then in use, and each one had a defect a viewer
 could see immediately.
 
@@ -313,8 +313,8 @@ steps at every join between the families.
 
 ### What is left, honestly
 
-First frames across the finished library agree to a worst block of 0.00-7.3.
-Last frames do not: 8.7-22.5. The bases are not the cause - against each other
+First frames across the finished library agree to a worst block of 0.00-6.61.
+Last frames do not: 7.38-23.03. The bases are not the cause - against each other
 they agree to 4.1-5.5 at the first frame and 5.0-7.2 at the last. The generator
 adds the drift, at the end of the sequence, where it has the least future
 context.
@@ -394,8 +394,8 @@ card. It is a cost with no benefit anywhere the wait is not there.
 
 ### And one thing that could not be fixed, tested three ways
 
-One look's clips end 20-22 from their own first frame. The other two end at
-12.6. All three are rendered by the same engine, at the same amplitude, with
+One look's clips end 20.03-23.03 from that look's reference frame. The other two
+run 7.38-18.62. All three are rendered by the same engine, at the same amplitude, with
 the same padding.
 
 The obvious suspect was the source material, so the same sentence was rendered

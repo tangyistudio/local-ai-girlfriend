@@ -129,7 +129,9 @@ def main():
                 # the tail of SIZE and the head of PROCESSOR, so "100% GPU" and
                 # "100% CPU" both stored as "GB 100%". The single word this
                 # field exists to record was the one being dropped, and every
-                # row in the shipped data files says "GB 100%" as a result.
+                # row in the shipped data files says "GB 100%" as a result;
+                # those rows have since been overwritten with a CORRUPT
+                # marker, which docs/00-hardware.md discloses.
                 proc = " ".join(line.split()[4:6])
         delta = lo1 - hi0
         print("  after load:        %d-%d MiB" % (lo1, hi1))

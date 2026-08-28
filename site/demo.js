@@ -59,7 +59,7 @@ export function mountDemo({ els }) {
      *     0.90       14.3
      *     1.20       17.5     the amplitude actually shipped
      *
-     * First frames stay put throughout — 0.00-7.3 — so this is specifically an
+     * First frames stay put throughout — 0.00-6.61 — so this is specifically an
      * end-of-sequence effect, not a misalignment. The engine's own expression
      * fade made it worse (29.7 to 54.1), and ending each clip on the best of
      * its last 25 frames recovered almost nothing (22.2 to 19.9), which is how

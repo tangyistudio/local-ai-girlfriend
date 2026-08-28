@@ -30,8 +30,11 @@
  * that make it worth having on one consumer card.
  *
  * ⚠️ EVERY CLIP HERE - idle and answer alike - is a render from the
- * same lip-sync engine over a 124-frame base clip, with the audio padded to
- * exactly that length. Both halves of that matter and both were arrived at by
+ * same lip-sync engine over a base clip that begins and ends on the pivot
+ * frame, with the audio padded to exactly THAT clip's length. Fifteen use a
+ * purpose-built 124-frame base; pj_ans2, pj_ans3 and pj_listen use 107-frame
+ * reaction clips, because the requirement is pivot-locked and long enough, not
+ * a fixed length. Both halves of that matter and both were arrived at by
  * measuring a library that failed:
  *
  *   Padding to the base length is what makes a talking clip END on the pivot.

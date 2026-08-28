@@ -1,9 +1,16 @@
 # What it actually costs in VRAM
 
-> ⚠️ **`bench/results.json` has been edited by hand once, and this is the
-> disclosure.** In commit `2f29a7d`, two rows had their `provenance` field
+> ⚠️ **Three committed data files have been edited by hand, across two commits,
+> and this is the disclosure.** In commit `2f29a7d`, two rows had their `provenance` field
 > changed from `FAILED - not a measurement` to `first-party`. No numeric reading
-> was touched. The reason is in that commit: a bug in `bench/vram.py` stamped
+> was touched. Separately, in commit `99d1626`, six rows across
+> `bench/ctx_qwen3_8b.json` and `bench/ctx_qwen3_8b_16gb_big.json` had their
+> `ollama_processor` field replaced with a CORRUPT marker pointing at
+> `bench/ctx_scale.py`, because a slice bug in that tool wrote the wrong two
+> words into every row instead of the GPU/CPU split. Eight hand-edited rows in total,
+> all of them provenance or annotation, none of them a reading.
+>
+> The reason for the first is in that commit: a bug in `bench/vram.py` stamped
 > every baseline as failed, because it tested `http_status` on records that make
 > no HTTP request. The guard was fixed and the two rows it had mislabelled were
 > corrected in place rather than re-run.
@@ -11,8 +18,9 @@
 > That is defensible and it is still a hand edit to the file this repository
 > asks you to trust as tool output. If you want the rows regenerated rather than
 > corrected, they are `8gb-tier: desktop only, before ballast` and
-> `8gb-tier: TTS+lipsync loaded under 14836 MiB ballast`, and the 8 GB result is
-> the difference between them.
+> `8gb-tier: TTS+lipsync loaded under 14836 MiB ballast`. The 8 GB result is not
+> the difference between those two rows - it is the second row minus the 14,836
+> MiB of ballast: 21,888 - 14,836 = 7,052 and 22,451 - 14,836 = 7,615.
 
 
 Every guide to running an AI companion locally opens with a hardware table, and
@@ -316,8 +324,7 @@ idle, and with the 27B actively generating.
 | Lip-sync, short | 0.82 s | 0.89 s | **1.11 s** |
 | Lip-sync, long | 3.12 s | 2.94 s | **5.00 s** |
 
-A resident-but-idle model, even one that pushed the card to 98% and forced
-paging, cost nothing measurable - two probes came back marginally *faster*,
+A resident-but-idle model, even one that pushed the card to 98%, cost nothing measurable - two probes came back marginally *faster*,
 which is noise. A model actually generating cost **1.35x on short clips and
 1.6x on long ones**.
 
