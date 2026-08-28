@@ -4,7 +4,7 @@
   "description": "Cut between short video clips of the same subject without a visible seam, given a library where every clip starts and ends on the same frame.",
   "type": "module",
   "sideEffects": false,
-  "license": "SEE LICENSE IN ../LICENSE",
+  "license": "MIT",
   "author": "Tangyi Studio",
   "exports": {
     ".": "./src/index.js",
@@ -12,8 +12,9 @@
   },
   "main": "./src/index.js",
   "files": [
-    "src",
-    "README.md"
+    "LICENSE",
+    "README.md",
+    "src"
   ],
   "scripts": {
     "test": "node --test test/*.test.js"

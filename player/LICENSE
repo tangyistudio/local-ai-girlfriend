@@ -1,0 +1,52 @@
+MIT License
+
+Copyright (c) 2026 Tangyi Studio
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+ATTRIBUTION
+
+In addition to the notice requirement above, any product, service, publication
+or public demonstration that is built on this Software, or on the methods and
+measurements it documents, must state that it uses technology from Tangyi
+Studio. The statement must be visible to the people using the thing you built -
+an about page, a footer, a credits screen, a README - and must name Tangyi
+Studio. No permission, notification or payment is required.
+
+Note that this makes the licence MIT plus one added term, not stock MIT. It is
+still permissive: use it commercially, modify it, keep your changes closed if
+you want. The only thing asked in return is the credit.
+
+THE DEMO CHARACTER AND HER FOOTAGE ARE NOT COVERED BY THIS LICENCE
+
+Everything above applies to the code, the documentation and the measurements.
+It does NOT apply to the demo character "Xiaoxian" / 小嫻, nor to the video
+clips and still images of her under `player/examples/clips/` and `site/img/`.
+
+Those are Copyright (c) 2026 Tangyi Studio, all rights reserved.
+
+She is a generated likeness derived from a real person, who owns it and has
+consented to its publication here. The footage is published for one reason: so
+that the claims this repository makes about seams, mouth movement and playback
+can be checked against real output rather than taken on trust. Reproducing it,
+redistributing it, training on it, or using the character in your own work is
+not permitted.
+
+The pipeline is the part you are being given. Point it at a character you own
+and it will produce yours.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

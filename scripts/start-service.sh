@@ -58,8 +58,14 @@ for _ in $(seq 1 60); do
   sleep 2
 done
 
+# ⚠️ No `|| echo 000` here. curl already writes 000 to stdout on a connection
+# failure AND exits non-zero, so the fallback appended a second one and CODE
+# became the string "000000" - which matched no branch below and fell to the
+# catch-all, reporting "ANSWERED 000000 WITH NO AUTH HEADER". It still failed
+# safe, but the operator got nonsense and the unreachable branch was dead.
 CODE="$(curl -s -o /dev/null -w '%{http_code}' -m 10 -X POST "$URL$PROBE" \
-        -H 'Content-Type: application/json' -d '{"text":"x"}' 2>/dev/null || echo 000)"
+        -H 'Content-Type: application/json' -d '{"text":"x"}' 2>/dev/null)"
+CODE="${CODE:-000}"
 case "$CODE" in
   401|403) echo "$NAME up, auth verified (unauthenticated request got $CODE)" ;;
   000)     echo "!! $NAME up but $PROBE is unreachable - auth NOT verified. Stopping it."

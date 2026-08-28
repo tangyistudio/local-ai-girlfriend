@@ -122,6 +122,8 @@ Two habits that make this structural rather than remembered:
 - Never launch with a bare `uvicorn` command. Use a start script that reads the
   secret from your config and exits if it cannot find one.
 - Have that script verify its own work: after startup, call the endpoint with no
-  auth header and assert it gets 401.
+  auth header and require 401 or 403. Treat 404 and unreachable as failures:
+  a probe against a route the service does not serve verifies nothing, and
+  each service here has its own routes - see the table above.
 
 `scripts/` in this repo does both.

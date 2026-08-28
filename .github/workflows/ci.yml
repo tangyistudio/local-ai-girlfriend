@@ -1,5 +1,6 @@
-# The one thing CI can check for a documentation repo: that the two language
-# versions still agree about every number.
+# CI for a repository that is mostly documentation and measurements. The
+# load-bearing check is that the two language versions still agree about every
+# number; the rest are cheap and catch the obvious.
 #
 # This is not a formality. The value of this repo is that its figures are
 # trustworthy, and the most likely way that stops being true is someone

@@ -115,9 +115,11 @@ def main():
         load_s = time.monotonic() - t0
 
         lo1, hi1 = sample()
-        # `ollama ps` is the only place that reports the CPU/GPU split, and on
-        # an oversubscribed card it is the difference between "it fits" and
-        # "it is quietly running half on the CPU".
+        # `ollama ps` is the only place that reports a CPU/GPU split at all.
+        # ⚠️ It reports intent, not residency - measured, it said "17 GB, 100%
+        # GPU" against an 11.5 GB delta. Read it as a hint, never as proof of
+        # fit, and note that the field it lands in here is itself corrupt; see
+        # the slice bug below.
         ps = subprocess.run(["ollama", "ps"], capture_output=True, text=True)
         proc = "?"
         for line in ps.stdout.splitlines():

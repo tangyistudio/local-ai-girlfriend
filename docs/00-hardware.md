@@ -1,5 +1,20 @@
 # What it actually costs in VRAM
 
+> ⚠️ **`bench/results.json` has been edited by hand once, and this is the
+> disclosure.** In commit `2f29a7d`, two rows had their `provenance` field
+> changed from `FAILED - not a measurement` to `first-party`. No numeric reading
+> was touched. The reason is in that commit: a bug in `bench/vram.py` stamped
+> every baseline as failed, because it tested `http_status` on records that make
+> no HTTP request. The guard was fixed and the two rows it had mislabelled were
+> corrected in place rather than re-run.
+>
+> That is defensible and it is still a hand edit to the file this repository
+> asks you to trust as tool output. If you want the rows regenerated rather than
+> corrected, they are `8gb-tier: desktop only, before ballast` and
+> `8gb-tier: TTS+lipsync loaded under 14836 MiB ballast`, and the 8 GB result is
+> the difference between them.
+
+
 Every guide to running an AI companion locally opens with a hardware table, and
 almost none of them say where the numbers came from. This one does. Each row is
 tagged with its provenance, and the ones we measured ourselves come with the

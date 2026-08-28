@@ -154,7 +154,7 @@ worse than the flash it was added to prevent.
 ## The implementation
 
 This describes the approach; `player/` implements it. Framework-agnostic, zero
-dependencies, No framework wrapper ships; the class is framework-agnostic. `player/examples/demo.html` runs it
+dependencies, no wrapper package of any kind. `player/examples/demo.html` runs it
 against a generated clip library that ships with it.
 
 ⚠️ Two defects in this list were found by **running that demo**, not by reading

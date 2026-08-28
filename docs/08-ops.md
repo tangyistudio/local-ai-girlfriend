@@ -155,7 +155,13 @@ Two supporting habits:
   reads the secret from your config file and injects it, and that exits if it
   cannot find one.
 - **Have the start script verify its own work**: after startup, call the
-  endpoint with no auth header and assert that it gets 401.
+  service's OWN probe route with no auth header and require a rejection.
+
+⚠️ 401 or 403 both pass. A 404, or a probe that cannot be reached, now STOPS the
+service instead of reporting success - probing a route the service does not
+serve verifies nothing, and the earlier version hard-coded one service's route
+for both, so it 404'd, fell through to "answered without auth" and killed the
+service it had just started.
 
 ## Restart on boot, not on a schedule
 

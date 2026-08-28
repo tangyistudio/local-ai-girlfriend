@@ -244,7 +244,7 @@ Anything failing 1 is unusable. Anything failing 4 will look like the character
 is talking to themselves. 2 and 3 determine which layer of the playback rotation
 the clip belongs to, which is `06-playback.md`.
 
-## Rendering the library, and the three ways it was wrong first
+## Rendering the library, and the five rounds it took
 
 Everything above is about *choosing* clips. This section is about *making* them,
 and it is the part that took four rounds to get right. Each round produced a

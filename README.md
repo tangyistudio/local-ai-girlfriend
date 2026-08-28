@@ -48,14 +48,21 @@ lip-sync service (2.4 GB), and speech synthesis is where the user's waiting
 time goes: 11.9 s end to end for a sentence, of which lip-sync is 1.75 s.
 
 **Context costs almost as much as the model.** Going from Ollama's 4096-token
-default to a 32k window increases an 8B model's footprint by **87%** (+4.4 GB).
+default to a 32k window increases an 8B model's footprint by **87%** (+4.42 GiB).
 A companion needs a persona and a history, so this is not optional.
 
 **On Windows, your tools will lie to you about capacity.** `ollama ps` reported
 "17 GB, 100% GPU" while the measured delta was 11.5 GB, and never once said it
-had offloaded anything. The WDDM driver oversubscribes into system RAM instead
-of failing, so there is no OOM and no error - just a slower machine. Throughput
-is the only honest fit signal.
+had offloaded anything. So the reported figure is intent, not residency, and
+you cannot read "it fits" off it.
+
+⚠️ We used to explain that as the Windows driver silently spilling into system
+RAM. **We withdrew it** - see docs/00-hardware.md. We never measured it, the
+card never actually filled, and the one diagnostic we proposed for paging came
+back negative: 86.3 against 86.5 tok/s, unchanged. What actually explains the
+gap is this page's other finding, that allocators shrink to fit. The retraction
+is left in the documents because it is the clearest thing here about how easily
+a plausible mechanism becomes a stated fact.
 
 **Residency is cheap; concurrency is not.** A 27B model sitting resident, even
 one that filled the card to 98%, cost nothing measurable. The same model
@@ -204,7 +211,7 @@ terms, several of which restrict commercial use - see
 ## Our own checker fails on our own clips, and we left it that way
 
     bash player/examples/check-clips.sh   # exits 1
-    python player/examples/check-mouth.py 'player/examples/clips/*_still.mp4'         --model face_landmarker.task      # exits 0
+    python player/examples/check-mouth.py 'player/examples/clips/*_still.mp4'         --model face_landmarker.task      # exits 0 - but see below
 
 The pivot checker reports `ENDS ELSEWHERE` for one of the three looks. Its last
 frames sit 20 to 22 out of 255 from the frame its clips start on, where the
@@ -218,6 +225,14 @@ amplitude, and rendering the same sentence over three different sources for
 that look produced 21.9, 20.0 and 23.5 - so it follows the face, not the source.
 The engine's own expression fade made it worse and trimming to the best of the
 last frames recovered almost nothing.
+
+⚠️ The second command needs two things this repository does not ship: `pip
+install mediapipe opencv-python numpy`, and a `face_landmarker.task` model file,
+which MediaPipe publishes and you download. Without them it exits 2 with a
+message saying which is missing - so of the two exit codes quoted above, one is
+reproducible from a bare clone and one is not. Said here rather than left for
+you to discover, because a page arguing that exit codes are checkable should not
+quote one you cannot check.
 
 The threshold was not moved to make this pass. A measurement tool tuned until
 your own data clears it measures nothing, and this repository exists because

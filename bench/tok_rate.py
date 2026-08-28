@@ -1,10 +1,15 @@
 """Token throughput, because on Windows it is the only honest fit signal.
 
 On Linux, a model that does not fit fails to load or visibly offloads layers to
-the CPU. On Windows in WDDM mode neither happens: the driver oversubscribes
-into system RAM, `ollama ps` keeps reporting "100% GPU", and the only symptom
-is that generation gets slower. Capacity tools will lie to you here. A stopwatch
-will not.
+the CPU. On Windows neither reliably happens: measured here, `ollama ps`
+reported "17 GB, 100% GPU" against a delta of 11.5 GB and never once said it
+had offloaded anything. Capacity tools report intent, not residency.
+
+⚠️ This file used to attribute that to the WDDM driver oversubscribing into
+system RAM. docs/00-hardware.md withdraws that explanation - unmeasured, and its
+own proposed diagnostic came back negative. The reason to measure throughput is
+not that it detects paging; it is that it is a direct observation of the thing
+you actually care about, and it does not depend on a mechanism being right.
 
 So: generate a fixed number of tokens and report tokens/second, using Ollama's
 own eval_count and eval_duration rather than wall time, which would fold in

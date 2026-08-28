@@ -123,7 +123,7 @@ export function mountDemo({ els }) {
     if (busy) {
       unlockTimer = setTimeout(() => {
         log('unlocked    no idle event arrived — releasing the buttons');
-            pending = null;
+      pending = null;
         for (const b of els.askButtons || []) b.disabled = false;
       }, 20000);
     }

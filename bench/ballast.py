@@ -101,8 +101,11 @@ def main():
             # the allocation without ever touching the pages, and on Windows
             # WDDM an untouched allocation is the driver's FIRST choice to
             # evict to system RAM when something else wants the card. That is
-            # the same oversubscription behaviour this repo documents
-            # elsewhere - which would mean the tool built to emulate a smaller
+            # (this is ordinary WDDM eviction of untouched pages, NOT the
+            # oversubscription mechanism docs/00-hardware.md withdraws - that
+            # claim was about the driver silently spilling a live allocation
+            # past physical VRAM, which we never measured) - which would mean
+            # the tool built to emulate a smaller
             # card was itself made of the most evictable memory on it, and a
             # tier could pass "tested under ballast" while more than the target
             # was really available. Writing the pages makes them resident.

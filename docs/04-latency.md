@@ -216,7 +216,7 @@ and allow the ones that play while nothing is pending to be longer.
 5. **Warm every model, early.** 56 s of cold start.
 6. **Cover the rest with pre-rendered clips.** The remainder is real computation.
 
-## Two things this page cannot currently tell you
+## What this page cannot currently tell you
 
 ### The breakdown does not add up, and we are not going to hide that
 
@@ -261,35 +261,39 @@ the same orchestrator with the two stages swapped for API calls, and report
 first-sentence and total separately. Until someone does, this page has nothing
 to offer on it, and a page with a gap is worth more than a page with a guess.
 
-### ⚠️ This section has survived one attempt to resolve it. Read this before the next one.
+### ⚠️ This section has survived two attempts to resolve it. Read this before the third.
 
-Someone measured the running stack - five uncached mid-length sentences - got
-speech synthesis at 7.64 s and lip-sync at 1.74 s, and rewrote this section to
-announce that the arithmetic now closed, with the remaining 2.5 s attributed to
-the language model. An audit took it apart the same night. Three things were
-wrong and each one alone is fatal:
+**Attempt one** measured the running stack - five uncached mid-length sentences -
+got speech synthesis at 7.64 s and lip-sync at 1.74 s, and rewrote this section
+to announce the arithmetic now closed, with the remaining 2.5 s attributed to
+the language model.
+
+That was wrong for one decisive reason and one procedural one:
 
 - **The residual was attributed to a stage the measurement does not contain.**
   `docs/00-hardware.md` defines the cold figure as "one sentence with nothing
   cached: **text in**, finished talking-head video out". Text in. The language
   model is outside it by definition, so there is nothing for a residual to be.
-- **The residual was larger than the whole request it sat inside.** The same
-  table records end-to-end with speech cached at 1.75 s, range 1.62-1.91. A
-  language model costing 2.5 s inside a 1.91 s request is impossible.
-- **The "reproduction" compared two different quantities.** The 1.74 s lip-sync
-  reading was matched against that 1.75 s end-to-end-cached row and called a
-  reproduction. The actual lip-sync rows are 0.82 s and 3.12 s. It was a
-  coincidence between two unrelated numbers.
+- **The measurement never reached `bench/results.json`.** It was taken in a
+  shell and typed into prose, in a repository whose whole claim is that every
+  number is in the committed evidence and the reader is invited to check.
 
-And the measurement itself never reached `bench/results.json`. It was taken in a
-shell and typed into prose - in a repository whose entire claim is that every
-number is in the committed evidence file and you are invited to check.
+There was also no gap of the kind it described. The 7.64 s came from mid-length
+sentences; this file's own probes are a short sentence and a long one, 2.38 s
+and 12.36 s. Nothing was reconciled because nothing comparable was measured.
 
-The numbers may well have been real. Mid-length sentences sit plausibly between
-this file's short and long probes. But a real measurement, unlogged, reasoned
-about incorrectly, and used to retire an honest "we do not know", is worse than
-the open question it replaced.
+**Attempt two** was this warning, and it got two of its own three points wrong -
+which is the reason it is being kept rather than tidied away. It claimed the
+2.5 s residual "was larger than the whole request it sat inside", when the
+residual sat inside the 11.9 s cold row, not the 1.75 s cached one. And it
+called the 1.74 s lip-sync reading a "coincidence" against the 1.75 s cached
+row - when `docs/00-hardware.md` says that row "isolates the lip-sync stage",
+so the two are measuring the same thing and the agreement is a genuine
+reproduction, not an accident. Had that stood, it would have contradicted the
+"lip-sync is 1.75 s" figure this repository states in six places.
 
-**If you want to close this gap: run it through `bench/`, commit the rows, and
-work out what the cold figure does and does not include before subtracting
-anything from it.**
+**So, three times now, the mistake has been the same one: reasoning confidently
+about what a number measures without going back to the sentence that defines
+it.** The gap in this page is real and unresolved. If you intend to close it:
+run the measurement through `bench/`, commit the rows, and before subtracting
+anything from anything, quote the definition of each figure you are subtracting.

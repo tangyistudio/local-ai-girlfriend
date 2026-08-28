@@ -34,9 +34,9 @@ Measured on this box, warm, from `docs/00-hardware.md`:
 | Lip-sync service | **~2.4 GB** | wav2lip-class, 256px |
 | Cloned-voice TTS | **~5.1 GB** | the single most expensive non-LLM component |
 | Qwen3 8B @ 4k ctx | **5.11 GiB** (5,233 MiB) | |
-| Qwen3 8B @ 8k ctx | 5.74 GB | |
-| Qwen3 8B @ 16k ctx | 6.89 GB | |
-| Qwen3 8B @ 32k ctx | **9.54 GiB** (9,764 MiB) | +4.43 GiB over 4k - an **87% increase** |
+| Qwen3 8B @ 8k ctx | 5.74 GiB (5,874 MiB) | |
+| Qwen3 8B @ 16k ctx | 6.89 GiB (7,051 MiB) | |
+| Qwen3 8B @ 32k ctx | **9.54 GiB** (9,764 MiB) | +4.42 GiB over 4k (9,764 - 5,233 = 4,531 MiB) - an **87% increase** |
 
 ⚠️ **These are upper bounds, not requirements.** Every figure above was measured
 with 24 GB available, and these components shrink when the card is smaller - the
@@ -239,10 +239,12 @@ reported "17 GB, 100% GPU" for the 27B while the measured delta was 11.5 GB. At
 32k under ballast it reported "10.0 GB, 100% GPU" while the delta was 6.9 GB.
 It never once said it had offloaded anything.
 
-**WDDM oversubscribes instead of failing.** On Windows the driver spills
-allocations past physical VRAM into system RAM. There is no OOM, no error, no
-log line - just a slower machine. This is the opposite of the Linux behaviour
-most guides assume.
+**⚠️ This document used to explain that with WDDM oversubscription - the driver
+spilling past physical VRAM into system RAM. `docs/00-hardware.md` withdraws
+that explanation**: it was never measured, the card never actually filled, and
+the throughput test proposed as its diagnostic came back negative. What is left
+is the observation itself, which is enough to act on: the reported figure is
+intent, not residency.
 
 Together those mean **you cannot tell from the tools whether a config fits on
 Windows**. The only honest signal is throughput: run `bench/tok_rate.py` with
