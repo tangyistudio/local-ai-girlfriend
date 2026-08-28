@@ -1,0 +1,61 @@
+# The one thing CI can check for a documentation repo: that the two language
+# versions still agree about every number.
+#
+# This is not a formality. The value of this repo is that its figures are
+# trustworthy, and the most likely way that stops being true is someone
+# re-measuring, updating the English table, and not touching the Chinese one.
+# Nothing about that mistake is visible in review - the diff looks complete.
+#
+# The bench tools themselves are not exercised here: they need an NVIDIA GPU
+# and a running inference service, neither of which exists on a CI runner.
+# They are checked for syntax only, which is honest about what CI can prove.
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  docs:
+    name: Bilingual number parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: English and Chinese docs must agree on every number
+        run: python bench/check_docs.py
+
+      - name: README pair
+        run: python bench/check_docs.py --pair README.md README.zh-TW.md
+
+      - name: Player tests
+        working-directory: player
+        run: node --test test/*.test.js
+
+      - name: Orchestrator tests
+        run: python services/test_orchestrator.py
+
+      - name: Site links resolve
+        run: python site/check_links.py
+
+      - name: Shell scripts parse
+        run: |
+          for f in scripts/*.sh player/examples/*.sh; do bash -n "$f" || exit 1; done
+          echo "syntax OK"
+
+      - name: Measurement tools parse
+        # No GPU here, so this proves syntax and nothing more. Say so rather
+        # than letting a green check imply the tools were exercised.
+        run: |
+          for f in bench/*.py; do
+            python -m py_compile "$f" || exit 1
+          done
+          echo "syntax OK - NOT a functional test, these need a GPU"

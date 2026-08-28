@@ -1,0 +1,27 @@
+{
+  "model": "qwen3:8b",
+  "rows": [
+    {
+      "ctx": 16384,
+      "floor_min": 16283,
+      "floor_max": 16455,
+      "loaded_min": 21821,
+      "loaded_max": 21949,
+      "delta_mib": 5366,
+      "load_s": 3.72,
+      "ollama_processor": "GB 100%",
+      "eval_count": 16
+    },
+    {
+      "ctx": 32768,
+      "floor_min": 14750,
+      "floor_max": 15137,
+      "loaded_min": 22061,
+      "loaded_max": 22361,
+      "delta_mib": 6924,
+      "load_s": 4.16,
+      "ollama_processor": "GB 100%",
+      "eval_count": 16
+    }
+  ]
+}

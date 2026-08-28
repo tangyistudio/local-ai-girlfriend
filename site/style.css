@@ -1,0 +1,286 @@
+/* Shared styling for the project pages.
+ *
+ * No build step, no framework, no CDN. The pages are static files you can
+ * serve from anywhere, which is also what makes them archivable - a landing
+ * page that needs a toolchain to render stops rendering the moment the
+ * toolchain moves on.
+ *
+ * BILINGUAL: both languages are in the HTML, and CSS hides the inactive one.
+ * Not a JS content swap - that would leave one language out of the page source
+ * and therefore out of search results, and the whole point of this project is
+ * that the English-language material does not exist yet.
+ */
+
+:root {
+  color-scheme: dark;
+  --bg: #0b0e14;
+  --panel: #11151c;
+  --panel-2: #0e121a;
+  --line: #1c2432;
+  --line-2: #2b3444;
+  --text: #c8d0dd;
+  --dim: #7c8798;
+  --bright: #e6ecf5;
+  --accent: #6ea8fe;
+  --good: #7ee2b8;
+  --warn: #e8a33d;
+  --bad: #f2777a;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+        "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Language switching. `html[data-lang]` gates both blocks. */
+[data-l] { display: none; }
+html[data-lang="en"] [data-l="en"],
+html[data-lang="zh"] [data-l="zh"] { display: revert; }
+/* Inline spans must not become block-level when revealed. */
+span[data-l], code[data-l], b[data-l], em[data-l] { display: none; }
+html[data-lang="en"] span[data-l="en"],
+html[data-lang="zh"] span[data-l="zh"],
+html[data-lang="en"] code[data-l="en"],
+html[data-lang="zh"] code[data-l="zh"],
+html[data-lang="en"] b[data-l="en"],
+html[data-lang="zh"] b[data-l="zh"] { display: inline; }
+
+.wrap { width: min(940px, 100% - 40px); margin: 0 auto; }
+
+header.top {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(11, 14, 20, 0.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+header.top .wrap {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 0; flex-wrap: wrap;
+}
+.brand { font-family: var(--mono); font-size: 14px; color: var(--bright); }
+.brand a { color: inherit; text-decoration: none; }
+header.top nav { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+header.top nav a, .langbtn {
+  color: var(--dim); text-decoration: none; font-size: 14px;
+  padding: 6px 10px; border-radius: 7px; border: 1px solid transparent;
+  background: none; font-family: inherit; cursor: pointer;
+}
+header.top nav a:hover, .langbtn:hover { color: var(--bright); background: #161c27; }
+header.top nav a[aria-current] { color: var(--bright); border-color: var(--line-2); }
+.langbtn { border-color: var(--line-2); font-family: var(--mono); }
+
+section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+
+h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.15; margin: 0 0 18px; color: var(--bright); letter-spacing: -0.02em; }
+h2 { font-size: clamp(22px, 3.2vw, 30px); margin: 0 0 8px; color: var(--bright); letter-spacing: -0.01em; }
+h3 { font-size: 18px; margin: 30px 0 6px; color: var(--bright); }
+p { margin: 0 0 14px; max-width: 68ch; }
+.lede { font-size: 19px; color: var(--dim); max-width: 62ch; }
+.dim { color: var(--dim); }
+b, strong { color: var(--bright); font-weight: 600; }
+a { color: var(--accent); }
+
+code { font-family: var(--mono); font-size: 0.9em; background: #161c27; padding: 1px 5px; border-radius: 4px; }
+pre {
+  font-family: var(--mono); font-size: 13px; line-height: 1.55;
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 10px; padding: 14px 16px; overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--dim); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+tbody tr:hover { background: #0f141d; }
+td.num { font-family: var(--mono); white-space: nowrap; }
+
+.grid { display: grid; gap: 16px; }
+@media (min-width: 720px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+
+.card {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; padding: 18px 20px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.tag {
+  display: inline-block; font-family: var(--mono); font-size: 12px;
+  padding: 2px 8px; border-radius: 20px; border: 1px solid var(--line-2);
+  color: var(--dim);
+}
+.tag.ok { color: var(--good); border-color: #23503f; }
+.tag.no { color: var(--bad); border-color: #5a2b2c; }
+.tag.warn { color: var(--warn); border-color: #5c452020; border-color: #5c4520; }
+
+.callout {
+  border-left: 3px solid var(--line-2); padding: 2px 0 2px 16px;
+  margin: 18px 0; color: var(--dim);
+}
+.callout.warn { border-left-color: var(--warn); }
+.callout b { color: var(--bright); }
+
+/* The embedded player.
+ *
+ * ⚠️ isolation:isolate is load-bearing. The player sets z-index on both video
+ * elements to control which is on top; without a stacking context here those
+ * escape and the video covers the whole site.
+ *
+ * ⚠️ 9:16, not 1:1. The clips are vertical, and a square box with object-fit:
+ * cover crops the subject's head and feet off to fill it. The aspect ratio of
+ * the container has to match the footage or you are cropping, not fitting.
+ */
+.stage {
+  position: relative; isolation: isolate; overflow: hidden;
+  aspect-ratio: 9 / 16; width: 100%; max-width: 300px;
+  border-radius: 12px; background: var(--panel);
+  border: 1px solid var(--line);
+}
+.stage > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Hero: the demo sits beside the headline, not below the article. */
+.hero { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 820px) { .hero { grid-template-columns: 1fr auto; } }
+.hero .stage { max-width: 280px; }
+
+.log {
+  font-family: var(--mono); font-size: 12px; line-height: 1.5;
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 10px; padding: 12px 14px; height: 200px;
+  overflow: auto; white-space: pre-wrap; color: var(--dim);
+}
+
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+button.act {
+  background: #1a2130; color: var(--text); border: 1px solid var(--line-2);
+  border-radius: 8px; padding: 7px 13px; font: inherit; font-size: 14px; cursor: pointer;
+}
+button.act:hover { background: #222a3b; color: var(--bright); }
+
+footer { padding: 40px 0 64px; color: var(--dim); font-size: 14px; }
+footer a { color: var(--dim); }
+
+.qa { border-bottom: 1px solid var(--line); padding: 22px 0; }
+.qa:last-child { border-bottom: 0; }
+.qa h3 { margin: 0 0 8px; font-size: 17px; }
+.qa p:last-child { margin-bottom: 0; }
+
+/* ── The demo block ────────────────────────────────────────────────────────
+ *
+ * Sits directly under the headline and is the first thing on the page, because
+ * the argument this site makes is "look at what one consumer card produces",
+ * and a small picture in a corner does not make it.
+ *
+ * The stage width is a custom property so one attribute on the container drives
+ * the picture, and the chat column reflows around it. Height follows from
+ * aspect-ratio - never set both, or footage gets cropped instead of fitted.
+ */
+.demo {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: auto minmax(300px, 1fr);
+  align-items: stretch;      /* the chat column matches the stage height */
+  margin-top: 26px;
+}
+/* ⚠️ Sized by HEIGHT, not width. The footage is 9:16, so a width-driven box
+ * runs off the bottom of a laptop screen before it looks big - and the point of
+ * this block is that the demo is the first thing you see, not the first thing
+ * you scroll to. Height with `aspect-ratio` lets the width follow; setting both
+ * would break the ratio and `object-fit: cover` would crop her instead. */
+.demo[data-size="s"] { --stage-h: min(400px, 62vh); }
+.demo[data-size="m"] { --stage-h: min(540px, 68vh); }
+.demo[data-size="l"] { --stage-h: min(680px, 76vh); }
+.demo .stage { height: var(--stage-h, min(540px, 68vh)); width: auto; max-width: 100%; }
+
+@media (max-width: 860px) {
+  .demo { grid-template-columns: 1fr; justify-items: center; }
+  .demo .stage { height: min(var(--stage-h, 540px), 58vh); }
+  .demo-side { width: 100%; }
+}
+
+.stage-tools {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  margin-top: 10px; justify-content: center;
+}
+.stage-tools.tight { margin-top: 0; justify-content: flex-start; }
+.stage-tools .grow { flex: 1 1 8px; }
+.stage-tools .seg { display: flex; gap: 2px; }
+button.tiny {
+  background: #161c27; color: var(--dim); border: 1px solid var(--line);
+  border-radius: 7px; padding: 4px 9px; font: inherit; font-size: 12px;
+  font-family: var(--mono); cursor: pointer;
+}
+button.tiny:hover { color: var(--bright); border-color: var(--line-2); }
+button.tiny[aria-pressed="true"] { color: var(--bright); background: #22314a; border-color: var(--line-2); }
+
+/* Fullscreen. ⚠️ The class does the work; the Fullscreen API is an upgrade that
+ * is refused in iframes, several in-app browsers, and outside user gestures. */
+.demo.is-full {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--bg); padding: 18px 22px; margin: 0;
+  grid-template-columns: auto minmax(300px, 460px);
+  justify-content: center; align-items: center;
+  overflow: auto;
+}
+.demo.is-full .stage { width: auto; height: min(84vh, 900px); max-width: 48vw; }
+.demo.is-full .demo-side { max-height: 84vh; }
+body.demo-full { overflow: hidden; }
+@media (max-width: 860px) {
+  .demo.is-full { grid-template-columns: 1fr; align-content: start; }
+  .demo.is-full .stage { height: 56vh; max-width: 100%; }
+}
+
+/* ── Chat ─────────────────────────────────────────────────────────────────── */
+.chat { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.chat-log {
+  display: flex; flex-direction: column; gap: 8px;
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px;
+  flex: 1 1 auto; min-height: 150px; overflow-y: auto;
+}
+
+.chat-log:empty::before {
+  content: attr(data-empty);
+  color: var(--dim); font-size: 14px;
+}
+.bubble {
+  max-width: 88%; padding: 9px 13px; border-radius: 14px;
+  font-size: 15px; line-height: 1.5;
+}
+.bubble.you { align-self: flex-end; background: #22314a; color: var(--bright); border-bottom-right-radius: 5px; }
+.bubble.her { align-self: flex-start; background: #171d29; border: 1px solid var(--line); border-bottom-left-radius: 5px; }
+.bubble.thinking { color: var(--dim); font-style: italic; }
+.chat-ask { display: flex; flex-direction: column; gap: 7px; }
+.chat-ask button { text-align: left; }
+.chat-ask button:disabled { opacity: .45; cursor: default; }
+.chat-note {
+  font-size: 12.5px; color: var(--dim); margin: 0;
+  border-left: 2px solid var(--line-2); padding-left: 11px;
+}
+
+/* ── Look strip ───────────────────────────────────────────────────────────── */
+.looks { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); margin: 20px 0 6px; }
+@media (max-width: 620px) { .looks { grid-template-columns: 1fr; } }
+.look-card { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); }
+.look-card img { display: block; width: 100%; height: auto; }
+.look-card .cap { padding: 9px 12px; font-size: 13px; color: var(--dim); }
+.look-card .cap b { display: block; color: var(--bright); font-size: 14px; margin-bottom: 2px; }
+
+/* The hero runs tight to the top: the demo is the argument, so it should not
+ * start below the fold on a laptop. */
+.hero-sec { padding-top: 26px; padding-bottom: 34px; }
+.hero-sec h1 { margin-bottom: 10px; }
+.hero-sec .lede { font-size: 17px; max-width: 70ch; margin-bottom: 0; }
+
+/* Chat header: who you are talking to, and what she is wearing. */
+.chat-head { display: flex; align-items: center; gap: 9px; }
+.chat-head b { color: var(--bright); font-size: 15px; }
+.chat-head .grow { flex: 1; }

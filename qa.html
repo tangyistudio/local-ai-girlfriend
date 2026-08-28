@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Q&amp;A — local-ai-girlfriend</title>
+<meta name="description" content="Questions about self-hosting an AI companion: which GPU, which models, what is legal to ship, and how to check the numbers rather than trust them.">
+<link rel="stylesheet" href="site/style.css">
+
+<header class="top">
+  <div class="wrap">
+    <span class="brand"><a href="./">local-ai-girlfriend</a></span>
+    <nav>
+      <a href="./"><span data-l="en">Overview</span><span data-l="zh">總覽</span></a>
+      <a href="qa.html" aria-current="page"><span data-l="en">Q&amp;A</span><span data-l="zh">問答</span></a>
+      <a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.md">Docs</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.zh-TW.md">文件</a>
+      <button class="langbtn" type="button">中文</button>
+    </nav>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h1><span data-l="en">Questions</span><span data-l="zh">問答</span></h1>
+    <p class="lede">
+      <span data-l="en">Answered from what we measured. Where we did not measure something, the
+        answer says so instead of guessing.</span>
+      <span data-l="zh">用量測到的東西回答。沒有量過的地方，答案會直說，不會用猜的。</span>
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">Hardware</span><span data-l="zh">硬體</span></h2>
+
+    <div class="qa">
+      <h3><span data-l="en">Will 8 GB really run this?</span><span data-l="zh">8 GB 真的跑得動嗎？</span></h3>
+      <p><span data-l="en">Voice and lip-sync locally, yes — tested at <b>7,052–7,615 of 8,192 MiB</b>
+        with both services doing real work. The language model does not fit alongside them and
+        has to be an API call.</span>
+        <span data-l="zh">語音與對嘴放本機，可以——實測 <b>8,192 MiB 之中的 7,052–7,615</b>，兩個服務都在真的工作。語言模型跟它們擠不下，必須走 API。</span></p>
+      <p><span data-l="en">That trade has a cost that is not measured in gigabytes: your
+        conversations leave the machine. If local inference is <em>why</em> you are self-hosting,
+        8 GB is not your tier.</span>
+        <span data-l="zh">那個交換有一個不以 GB 計價的代價：你的對話會離開這台機器。如果本機推論正是你自架的<em>理由</em>，8 GB 不是你的等級。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">You only have one card. How can you claim anything about 8 or 16 GB?</span><span data-l="zh">你只有一張卡，憑什麼宣稱 8 或 16 GB 的事？</span></h3>
+      <p><span data-l="en">By holding VRAM with a ballast process until the card has only the target
+        amount free, then running the real stack in what is left. That emulates <b>capacity</b>,
+        which is what decides whether a model loads, whether a runtime silently offloads, and
+        whether an allocator starts thrashing.</span>
+        <span data-l="zh">用一個壓艙行程佔住顯存，直到卡上只剩目標容量，再把真正的堆疊跑在剩下的空間裡。那模擬的是<b>容量</b>——決定模型載不載得進去、執行期會不會安靜地分流、配置器會不會開始換頁。</span></p>
+      <p><span data-l="en">It does <b>not</b> emulate a different GPU. Bandwidth, core count and cache
+        stay ours. So “it fits” transfers to real hardware and “it is this fast” does not, and the
+        documentation marks which is which.</span>
+        <span data-l="zh">它<b>不</b>模擬另一張 GPU。頻寬、核心數、快取都還是我們這張的。所以「裝得下」可以套用到真實硬體，「有這麼快」不行，而文件會標明哪個是哪個。</span></p>
+      <p><span data-l="en">32 GB is untested and labelled as such. You cannot emulate more memory
+        than you have.</span>
+        <span data-l="zh">32 GB 沒測過，而且如此標示。你沒辦法模擬出比手上更多的記憶體。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Can I just add up the component sizes for my own card?</span><span data-l="zh">我可以自己把元件大小加總來估我的卡嗎？</span></h3>
+      <p><span data-l="en"><b>No, and this is the single most useful thing on the site.</b> Components
+        shrink when there is less memory: the same TTS held 5.1 GB with 24 GB free and ran in
+        2.7 GB constrained to 8 GB, at nearly the same speed.</span>
+        <span data-l="zh"><b>不行，而這是整個網站上最有用的一件事。</b> 記憶體少的時候元件會縮：同一個 TTS 在有 24 GB 時佔 5.1 GB，被限制到 8 GB 時跑在 2.7 GB，速度幾乎一樣。</span></p>
+      <p><span data-l="en">We did that sum, concluded 8 GB was impossible, published it, and were
+        wrong. Figures measured on a roomy card are an upper bound on <em>usage</em>, not a
+        <em>requirement</em>.</span>
+        <span data-l="zh">我們做過那個加總、斷定 8 GB 不可能、發布了，然後錯了。在寬裕的卡上量到的數字，是<em>使用量</em>的上限，不是<em>需求量</em>。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Does the desktop really matter?</span><span data-l="zh">桌面真的有差嗎？</span></h3>
+      <p><span data-l="en">Before a single model loads, this machine was holding between 1.9 and
+        3.4 GB for the compositor, browsers and background apps — measured twice, hours apart,
+        with the same services stopped. On an 8 GB card the high reading is 40% of everything you
+        have, and the gap between the two readings is larger than a small language model.</span>
+        <span data-l="zh">在任何一個模型載入之前，這台機器就為了合成器、瀏覽器與背景程式佔著 1.9 到 3.4 GB——相隔數小時量了兩次，同樣停掉服務。在 8 GB 的卡上，高的那個讀數是你全部的 40%，而兩次讀數之間的差距比一顆小語言模型還大。</span></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">Models and licensing</span><span data-l="zh">模型與授權</span></h2>
+
+    <div class="qa">
+      <h3><span data-l="en">Can I sell something built on this?</span><span data-l="zh">我可以拿這個做生意嗎？</span></h3>
+      <p><span data-l="en">The code here is MIT. The models are the problem, and the honest answer
+        is that <b>we do not have a fully verified commercial lip-sync path to recommend</b>.</span>
+        <span data-l="zh">這裡的程式碼是 MIT。問題出在模型，而誠實的答案是：<b>我們沒有一條完整查證過的商用對嘴路線可以推薦。</b></span></p>
+      <p><span data-l="en">Of the four common options, three carry non-commercial constraints: one
+        restricts its entire repository, and two are permissively licensed on top while shipping
+        face-detection weights licensed for non-commercial research on the mandatory inference
+        path. The language and speech models are genuinely clean.</span>
+        <span data-l="zh">四個常見選項裡有三個帶著非商業限制：一個限制的是整個 repo，另外兩個上層授權寬鬆，卻在必經的推論路徑上挾帶「僅限非商業研究」的臉部偵測權重。語言與語音模型是真的乾淨。</span></p>
+      <p><a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.md">The full licence map, with links and dates →</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.zh-TW.md">完整授權地圖，附連結與日期 →</a></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">You recommended a model and then withdrew it. What happened?</span><span data-l="zh">你們推薦了一個模型然後撤回。發生什麼事？</span></h3>
+      <p><span data-l="en">We read its LICENSE (permissive), checked its model card (no separate
+        terms), and called it clean — <b>without doing the last step of our own published
+        method</b>, which is to list what the project loads at runtime and check each of those
+        too. It bundles third-party detection weights that are not permissively licensed, and
+        imports them at the top of the inference path.</span>
+        <span data-l="zh">我們讀了它的 LICENSE（寬鬆）、看了模型卡（沒有另訂條款），然後判定它乾淨——<b>卻沒有做我們自己發布的方法的最後一步</b>，也就是列出這個專案在執行時載入什麼、並逐一檢查。它挾帶了授權不寬鬆的第三方偵測權重，而且在推論路徑的頂層 import 它們。</span></p>
+      <p><span data-l="en">The uncomfortable part: we <em>did</em> do that step on the project that
+        openly documents its dependencies, and flagged that one as risky. That inverts the real
+        risk. <b>A project that publishes its dependency chain is the safe one to evaluate; the
+        one that says nothing is the one you have to go and look at.</b></span>
+        <span data-l="zh">不舒服的部分是：我們<em>確實</em>對那個公開記錄自己依賴的專案做了那一步，然後把它標成有風險的。那把真正的風險顛倒過來了。<b>公開自己依賴鏈的專案，才是好評估的那一個；什麼都不說的那個，才是你必須去翻的。</b></span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Which lip-sync model should I use, then?</span><span data-l="zh">那我到底該用哪個對嘴模型？</span></h3>
+      <p><span data-l="en">If it is for you, your friends, or research: whichever is cheapest and
+        best documented. If money will change hands, there are two routes we did not finish and
+        will not pretend we did — resolve the one undocumented dependency in the most open
+        project, or take one of the Apache-licensed models and replace its face detector, which
+        is exactly what the upstream that pioneered that approach tells you to do.</span>
+        <span data-l="zh">如果是給自己、朋友或研究用：挑最便宜、文件最好的那個。如果會有金錢往來，有兩條我們沒走完、也不會假裝走完的路——把最開放的那個專案裡唯一沒載明的依賴釐清，或者拿一個 Apache 授權的模型把它的臉部偵測器換掉，那正是開創這個做法的上游告訴你要做的事。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Why does the guide not name one stack and tell me to install it?</span><span data-l="zh">為什麼這份指南不直接指定一套叫我裝？</span></h3>
+      <p><span data-l="en">Because the licence position of every lip-sync option is unresolved, so
+        shipping a runnable stack with weights in it would ship the problem. The reference
+        implementation describes a socket and you choose what goes in it — which also happens to
+        be the design that lets a component move off the card when you are short of memory.</span>
+        <span data-l="zh">因為每一個對嘴選項的授權立場都未解，所以出貨一套內含權重、可直接跑的堆疊，等於把問題一起出貨。參考實作描述的是一個插座，你決定插什麼——而那剛好也是「記憶體不夠時可以把某個元件搬離顯卡」的那個設計。</span></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">Building it</span><span data-l="zh">實作</span></h2>
+
+    <div class="qa">
+      <h3><span data-l="en">What actually makes it feel fast?</span><span data-l="zh">到底什麼讓它感覺快？</span></h3>
+      <p><span data-l="en">In order of how much they move the number: pick a lip-sync model that runs
+        faster than realtime (<b>13.3×</b> between the two we measured); split the reply and
+        pipeline per sentence (<b>6×</b> on time-to-first-clip); stop re-encoding the reference
+        voice on every call (11–16 s per sentence down to 2.7–3.4 s); warm every model early
+        (56 s of cold start).</span>
+        <span data-l="zh">依對數字的影響排序：挑一個比即時更快的對嘴模型（我們量的兩個差 <b>13.3 倍</b>）；切開回覆、逐句管線化（開口前的等待快 <b>6 倍</b>）；停止每次呼叫都重新編碼參考聲音（每句從 11–16 秒降到 2.7–3.4 秒）；提早暖機每一個模型（那是 56 秒的冷啟動）。</span></p>
+      <p><span data-l="en">Then stop optimising. What remains is real computation, and the move is to
+        cover it — pre-rendered reaction clips, so the wait becomes part of the interaction
+        instead of a spinner.</span>
+        <span data-l="zh">然後停止優化。剩下的是真實運算，該做的是把它蓋起來——預先算好的反應片，讓等待變成互動的一部分而不是一個轉圈圈。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Why is the playback so complicated? It is just switching videos.</span><span data-l="zh">播放為什麼那麼複雜？不就是換影片嗎？</span></h3>
+      <p><span data-l="en">Because every visible defect happens at the moment of a switch, and there
+        are more ways to get that moment wrong than you would expect: the file’s index at the
+        wrong end so the browser cannot paint; the preloader overwriting the element you are
+        handing to; “data loaded” not meaning “frame drawn”; a hard cut with no z-index leaving
+        both layers invisible for one frame; a timer hiding the old frame before the new one
+        exists.</span>
+        <span data-l="zh">因為每一個看得見的缺陷都發生在切換的那一刻，而那一刻能出錯的方式比你想的多：檔案索引在錯的一端，瀏覽器畫不出來；預載器蓋掉你正在交棒的元素；「資料載入」不等於「畫面畫出來」；硬切沒設 z-index，導致有一幀兩層都不可見；用計時器在新畫面存在之前就藏起舊的。</span></p>
+      <p><span data-l="en">The governing rule is short: <b>never hide a frame you have for a frame you
+        do not.</b> The rest of the complexity is enforcing it.</span>
+        <span data-l="zh">統治一切的規則很短：<b>絕不為了一張你還沒有的畫面，去藏起一張你已經有的畫面。</b>其餘的複雜度都是在執行它。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Why shapes instead of a character in the demo?</span><span data-l="zh">demo 為什麼是方塊不是角色？</span></h3>
+      <p><span data-l="en">Shipping character footage means shipping a likeness, and shipping the
+        weights to generate one means shipping the licence problem. Neither is needed to
+        demonstrate the point — and shapes make the invariant <em>visible</em> in a way footage
+        does not. You can see that every clip departs from and returns to the same arrangement.</span>
+        <span data-l="zh">出貨角色影片等於出貨肖像，出貨生成它的權重等於出貨授權問題。兩者都不是示範這件事所必需——而方塊讓那個不變條件<em>看得見</em>，影片做不到。你可以直接看出每一支片都從同一個排列出發、又回到它。</span></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">Trusting this</span><span data-l="zh">信不信得過</span></h2>
+
+    <div class="qa">
+      <h3><span data-l="en">How do I know you did not just make these numbers up?</span><span data-l="zh">我怎麼知道這些數字不是你們編的？</span></h3>
+      <p><span data-l="en">You do not have to take our word for it, and that is deliberate. Every
+        figure is tagged with where it came from — in the committed results file, measured here
+        but not persisted, from the source project’s log, or someone else’s published number.
+        The tools are in the repository and run against any HTTP service.</span>
+        <span data-l="zh">你不必相信我們的話，而那是刻意的。每一個數字都標了來源——在提交的結果檔裡、在這裡量過但沒存檔、出自來源專案的紀錄、或是別人發表的數字。工具都在 repo 裡，而且可以打任何 HTTP 服務。</span></p>
+      <p><span data-l="en">An adversarial review of the first draft found a fabricated verification,
+        a wrong multiplier repeated in four documents, a self-contradicting percentage, and a
+        recommendation that would have sent readers into the exact trap the page warns about.
+        All of it is corrected, and the corrections are documented rather than quietly
+        swallowed.</span>
+        <span data-l="zh">對初稿的對抗式審查找出了一個被捏造的驗證、一個在四份文件裡重複的錯誤倍數、一個自我矛盾的百分比，以及一個會把讀者送進這一頁自己在警告的那個陷阱的推薦。全部都改了，而且更正是被記錄下來的，不是安靜地吞掉。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">What is a “session” number and why should I care?</span><span data-l="zh">「session」數字是什麼，我為什麼要在意？</span></h3>
+      <p><span data-l="en">It means we measured it on this machine but the tool wrote no file, so you
+        cannot re-derive it. The review’s sharpest finding was that <b>the figures hardest to
+        obtain were exactly the ones with no artifact behind them</b> — the manual bookkeeping,
+        the throughput runs, the end-to-end timings. Those are now labelled rather than blended
+        in with the reproducible ones. A “session” row is a debt we owe, not a number to lean
+        on.</span>
+        <span data-l="zh">意思是我們在這台機器上量過，但工具沒有寫檔，所以你沒辦法重新推導它。那次審查最銳利的發現是：<b>最難取得的數字，正好是背後沒有留下任何檔案的那些</b>——手動記帳的、吞吐量的、端到端計時的。現在它們被標出來，而不是跟可重現的混在一起。一個「session」列是一筆我們欠的債，不是一個可以拿來依靠的數字。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Is this the same as the Chinese guides it started from?</span><span data-l="zh">這跟它出發的那些中文指南一樣嗎？</span></h3>
+      <p><span data-l="en">No, and it is not a correction of them either. They describe a different
+        stack on different hardware, and their numbers are theirs. What is new here is the bill:
+        per-component measurements with provenance, the failure modes that show up when the
+        components run together, and a licence audit that changed our own recommendation.</span>
+        <span data-l="zh">不一樣，而且也不是在勘誤它們。它們描述的是不同硬體上的不同堆疊，它們的數字是它們的。這裡新的東西是帳單：逐元件、標了來源的量測，元件湊在一起時才出現的失效模式，以及一次改變了我們自己推薦的授權稽核。</span></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">Scope</span><span data-l="zh">範圍</span></h2>
+
+    <div class="qa">
+      <h3><span data-l="en">Does this cover adult content?</span><span data-l="zh">這涵蓋成人內容嗎？</span></h3>
+      <p><span data-l="en">It is engineering documentation. Nothing here is adult content, and
+        nothing here is crippled to prevent it — what you generate on your own hardware is your
+        business.</span>
+        <span data-l="zh">這是工程文件。這裡沒有成人內容，也沒有為了防止它而閹割任何東西——你在自己的硬體上生成什麼是你的事。</span></p>
+      <p><span data-l="en">There is one line: <b>this does not cover putting a real person’s
+        likeness onto a synthetic body</b>, and it will not. That is about people who did not
+        consent, not about what consenting adults make for themselves.</span>
+        <span data-l="zh">只有一條線：<b>這裡不涵蓋把真人臉孔套到合成身體上</b>，而且不會加入。那是關於沒有同意的人，不是關於成年人自己做什麼。</span></p>
+    </div>
+
+    <div class="qa">
+      <h3><span data-l="en">Where did this come from?</span><span data-l="zh">這是從哪來的？</span></h3>
+      <p><span data-l="en">Extracted from a production talking-head companion product. Everything
+        product-specific — persona, business logic, character assets, billing — is excluded by
+        design. What remains is the engineering, and the mistakes.</span>
+        <span data-l="zh">萃取自一個上線中的 talking-head 伴侶產品。所有產品專屬的東西——人設、商業邏輯、角色素材、計費——都刻意排除。留下來的是工程，以及那些錯誤。</span></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><a href="./"><span data-l="en">← Back to the overview</span><span data-l="zh">← 回到總覽</span></a></p>
+    <p style="margin-top:18px">
+      <a href="https://github.com/tangyistudio/local-ai-girlfriend">GitHub</a> ·
+      <a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.md">Hardware</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.zh-TW.md">硬體</a> ·
+      <a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.md">Licences</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.zh-TW.md">授權</a>
+    </p>
+  </div>
+</footer>
+
+<script src="site/lang.js"></script>
+</html>

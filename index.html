@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>local-ai-girlfriend — what a self-hosted AI companion actually costs</title>
+<meta name="description" content="Measured VRAM, latency and licensing for running an AI girlfriend on your own GPU. Every number tagged with where it came from. English and Traditional Chinese.">
+<meta property="og:title" content="local-ai-girlfriend">
+<meta property="og:description" content="The component lists already exist. This is what the bill actually looks like when you build it.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="site/style.css">
+
+<header class="top">
+  <div class="wrap">
+    <span class="brand"><a href="./">local-ai-girlfriend</a></span>
+    <nav>
+      <a href="./" aria-current="page"><span data-l="en">Overview</span><span data-l="zh">總覽</span></a>
+      <a href="qa.html"><span data-l="en">Q&amp;A</span><span data-l="zh">問答</span></a>
+      <a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.md">Docs</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.zh-TW.md">文件</a>
+      <button class="langbtn" type="button">中文</button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero-sec">
+  <div class="wrap">
+    <h1>
+      <span data-l="en">Running an AI girlfriend on your own GPU: what it actually costs</span>
+      <span data-l="zh">在自己的顯卡上跑 AI 女友：實際要花多少</span>
+    </h1>
+    <p class="lede">
+      <span data-l="en">Talk to Xiaoxian first. Then read what it took to make that happen on one
+        consumer graphics card — measured, with every number tagged with where it came from.</span>
+      <span data-l="zh">先跟小嫻說說話。然後往下看，這件事在一張消費級顯卡上到底要付出什麼——全部量測過，每個數字都標了來源。</span>
+    </p>
+
+    <div class="demo" id="demo" data-size="m">
+      <div>
+        <div class="stage" id="stage">
+          <img id="poster" alt="" aria-hidden="true" style="display:none">
+          <video id="va" playsinline></video>
+          <video id="vb" playsinline></video>
+        </div>
+
+        <p id="blocked" hidden class="dim" style="font-size:12px;text-align:center;margin-top:8px">
+          <span data-l="en">Click anywhere to allow audio</span>
+          <span data-l="zh">點一下畫面以允許聲音</span>
+        </p>
+      </div>
+
+      <div class="demo-side chat">
+        <div class="chat-head">
+          <b><span data-l="en">Xiaoxian</span><span data-l="zh">小嫻</span></b>
+          <span class="tag" id="lookTag"></span>
+          <span class="grow"></span>
+          <span class="dim" style="font-size:12px"><span data-l="en">pre-rendered demo</span><span data-l="zh">預先算好的示範</span></span>
+        </div>
+        <div class="stage-tools tight">
+          <span class="seg">
+            <button class="tiny look" data-look="knit" aria-pressed="true"><span data-l="en">Knit</span><span data-l="zh">針織衫</span></button>
+            <button class="tiny look" data-look="shirt" aria-pressed="false"><span data-l="en">Blouse</span><span data-l="zh">襯衫</span></button>
+            <button class="tiny look" data-look="pj" aria-pressed="false"><span data-l="en">Nightwear</span><span data-l="zh">睡衣</span></button>
+          </span>
+          <span class="grow"></span>
+          <span class="seg">
+            <button class="tiny size" data-size="s" aria-pressed="false">S</button>
+            <button class="tiny size" data-size="m" aria-pressed="true">M</button>
+            <button class="tiny size" data-size="l" aria-pressed="false">L</button>
+          </span>
+          <button class="tiny" id="bFull" aria-pressed="false"><span data-l="en">⤢ Full</span><span data-l="zh">⤢ 全螢幕</span></button>
+          <button class="tiny" id="bBreak" style="opacity:.55" title="see the error path">!</button>
+        </div>
+
+        <div class="chat-log" id="chatLog">
+          <div class="bubble her">
+            <span data-l="en">Hi, I&rsquo;m Xiaoxian. Ask me one of these — I have an answer ready for each.</span>
+            <span data-l="zh">嗨，我是小嫻。挑一個問我吧——這三題我都先準備好答案了。</span>
+          </div>
+        </div>
+
+        <div class="chat-ask">
+          <button class="act ask" data-q="0">
+            <span data-l="en">“What are you doing right now?”</span><span data-l="zh">「你現在在做什麼？」</span></button>
+          <button class="act ask" data-q="1">
+            <span data-l="en">“Do you ever get tired?”</span><span data-l="zh">「你會覺得累嗎？」</span></button>
+          <button class="act ask" data-q="2">
+            <span data-l="en">“Do you like talking like this?”</span><span data-l="zh">「你喜歡這樣聊天嗎？」</span></button>
+        </div>
+
+        <p class="chat-note">
+          <span data-l="en"><b>This is a simulation.</b> The answers were rendered in advance and
+            saved as files, so clicking a question plays a video that already existed — no model runs
+            in your browser and no server is called. It shows you the output and the playback. It
+            shows you <em>nothing</em> about speed: there is no computation here to be fast or slow
+            at, and an earlier version of this page was slower than the real thing because it made
+            you sit through a "let me think" clip that was covering a wait that did not exist.
+            <b>Point the same player at your own LLM endpoint and it runs live.</b> What that costs
+            is measured, not simulated, and it is on the latency page: <b>11.9 s</b> end to end for
+            one sentence on the card benchmarked here — the number a filler clip is for.</span>
+          <span data-l="zh"><b>這是模擬。</b> 答覆是事先算好存成檔案的，所以你按下去播的是一支本來就存在的影片——瀏覽器裡沒有模型在跑，也沒有呼叫任何伺服器。它給你看的是產出與播放，關於<em>速度</em>它什麼都沒告訴你：這裡根本沒有運算可言，而這個頁面的前一版還比真實情況更慢，因為它讓你先看完一支「讓我想想」——那支片在蓋一段不存在的等待。<b>把同一個播放器接上你自己的 LLM 端點，它就會即時運作。</b>那條路的代價是量出來的、不是模擬的，寫在延遲那一頁：在這裡量的卡上，一句話端到端 <b>11.9 秒</b>——墊詞片就是為了那個數字存在的。</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">Three looks, one pivot frame each</span><span data-l="zh">三套外觀，各自一張樞紐幀</span></h2>
+    <p><span data-l="en">Switching outfit is not a costume change on one video. Each look is its own
+      clip family with its own pivot frame — the single frame every clip in that family begins and
+      ends on — and the families are not interchangeable. Measured between two of them: <b>50.6</b>
+      mean and <b>202</b> worst-block out of 255, which is simply what two different pictures look
+      like. So looks are switched deliberately, never mid-rotation.</span>
+      <span data-l="zh">換服裝不是同一支影片換件衣服。每一套外觀是自己的一個片段家族，各有一張樞紐幀——那是該家族每一支片起訖的同一格——而家族之間不能互換。量兩套之間：平均 <b>50.6</b>、最差區塊 <b>202</b>（滿分 255），那就是兩張不同的畫面該有的樣子。所以換外觀一定是使用者主動觸發，絕不在輪替中途發生。</span></p>
+
+    <div class="looks">
+      <figure class="look-card" style="margin:0">
+        <img src="site/img/look-knit.jpg" alt="" loading="lazy" width="520" height="936">
+        <figcaption class="cap"><b><span data-l="en">Knit sweater</span><span data-l="zh">針織衫</span></b>
+          <span data-l="en">8 clips · daytime room</span><span data-l="zh">8 支片 · 白天室內</span></figcaption>
+      </figure>
+      <figure class="look-card" style="margin:0">
+        <img src="site/img/look-shirt.jpg" alt="" loading="lazy" width="520" height="936">
+        <figcaption class="cap"><b><span data-l="en">Blouse</span><span data-l="zh">襯衫</span></b>
+          <span data-l="en">8 clips · office</span><span data-l="zh">8 支片 · 辦公室</span></figcaption>
+      </figure>
+      <figure class="look-card" style="margin:0">
+        <img src="site/img/look-pj.jpg" alt="" loading="lazy" width="520" height="936">
+        <figcaption class="cap"><b><span data-l="en">Nightwear</span><span data-l="zh">睡衣</span></b>
+          <span data-l="en">8 clips · evening</span><span data-l="zh">8 支片 · 夜晚</span></figcaption>
+      </figure>
+    </div>
+
+    <p class="dim" style="font-size:13.5px">
+      <span data-l="en">The character is generated, not a person. No likeness tooling ships in this
+        repository and none is documented in it — that line is deliberate and it is the one thing
+        here that is a policy rather than a measurement.</span>
+      <span data-l="zh">這個角色是生成的，不是真人。這個 repo 不附帶、也不記載任何真人胖像的工具——這條界線是刻意畫的，也是這裡唯一一件屬於政策而非量測的事。</span></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">The finding that changed our own conclusions</span><span data-l="zh">推翻我們自己結論的那個發現</span></h2>
+    <div class="callout">
+      <p><b><span data-l="en">Components do not have a fixed size. They take less when there is less.</span><span data-l="zh">元件沒有固定大小。可用的少，它就拿得少。</span></b></p>
+      <p><span data-l="en">The cloned-voice TTS held 5.1 GB with 24 GB available and ran in
+        <b>2.7 GB</b> when we constrained the card to 8 GB — same work, 18–26% slower on
+        short sentences and no slower at all on long ones.</span>
+        <span data-l="zh">克隆聲音 TTS 在有 24 GB 可用時佔 5.1 GB，把卡限制到 8 GB 時跑在 <b>2.7 GB</b>——同樣的工作，短句慢 18–26%，長句完全沒慢。</span></p>
+    </div>
+    <p>
+      <span data-l="en">That breaks the arithmetic every guide does, including our own first draft.
+        We published <em>“8 GB is impossible — the TTS alone is 5.1 GB and only 4.8 GB is
+        free”</em>, then tested it and watched the whole stack run in
+        <b>7,052–7,615 of 8,192 MiB</b>. The wrong prediction is still in the documentation,
+        because it is the clearest argument we have against sizing a machine from someone
+        else’s numbers — including ours.</span>
+      <span data-l="zh">這打掉了每一份指南都在做的加總，包括我們自己的初稿。我們發布過<em>「8 GB 不可能——光 TTS 就 5.1 GB，而只剩 4.8 GB」</em>，然後實測，看著整套堆疊跑在 <b>8,192 MiB 之中的 7,052–7,615</b>。那個錯誤預測還留在文件裡，因為它是我們手上最有力的證據，說明不該用別人的數字去推算一台機器——包括我們的數字。</span>
+    </p>
+  </div>
+</section>
+
+<section id="tiers">
+  <div class="wrap">
+    <h2><span data-l="en">Which card do you need</span><span data-l="zh">你需要哪張卡</span></h2>
+    <p class="dim">
+      <span data-l="en">Smaller tiers were tested by holding VRAM until the card had only that much
+        free. That emulates <b>capacity</b>, which decides whether things load and run. It does
+        not emulate a different GPU’s bandwidth — so “it fits” transfers to real hardware and
+        “it is this fast” does not.</span>
+      <span data-l="zh">較小的等級是用工具佔住顯存、只留下目標容量來測的。那模擬的是<b>容量</b>，決定東西載不載得進去、跑不跑得動。它不模擬另一張 GPU 的頻寬——所以「裝得下」可以套用到真實硬體，「有這麼快」不行。</span>
+    </p>
+    <table>
+      <thead><tr>
+        <th><span data-l="en">Card</span><span data-l="zh">卡</span></th>
+        <th><span data-l="en">Configuration</span><span data-l="zh">配置</span></th>
+        <th><span data-l="en">Status</span><span data-l="zh">狀態</span></th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="num">8 GB</td>
+          <td><span data-l="en">Voice + lip-sync local, LLM remote</span><span data-l="zh">語音＋對嘴本機，LLM 遠端</span></td>
+          <td><span class="tag ok">tested</span> <span class="num dim">7,052–7,615 / 8,192 MiB</span></td>
+        </tr>
+        <tr>
+          <td class="num">16 GB</td>
+          <td><span data-l="en">Everything local, 8B at 32k context</span><span data-l="zh">全本機，8B 在 32k 上下文</span></td>
+          <td><span class="tag ok">tested</span> <span class="dim"><span data-l="en">full speed from a cold start</span><span data-l="zh">冷啟動全速</span></span></td>
+        </tr>
+        <tr>
+          <td class="num">24 GB</td>
+          <td><span data-l="en">Everything local, room to spare</span><span data-l="zh">全本機，還有餘裕</span></td>
+          <td><span class="tag ok">tested</span> <span class="dim"><span data-l="en">the box this was measured on</span><span data-l="zh">就是量測用的這台</span></span></td>
+        </tr>
+        <tr>
+          <td class="num">32 GB</td>
+          <td class="dim">—</td>
+          <td><span class="tag warn">untested</span> <span class="dim"><span data-l="en">we do not have the hardware</span><span data-l="zh">我們沒有這個硬體</span></span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p><a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/01-tiers.md">Full configurations and caveats →</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/01-tiers.zh-TW.md">完整配置與但書 →</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">What that demo is actually doing</span><span data-l="zh">那個 demo 實際上在做什麼</span></h2>
+    <p>
+      <span data-l="en">Asking a question queues <b>two</b> clips: a filler, then the answer. That is
+        the production sequence — she says “let me think” while a reply renders, so the wait becomes
+        something she is doing instead of a spinner. After the model choice, the pipelining and the
+        caching, what is left is genuine computation, and the remaining move is to cover it.</span>
+      <span data-l="zh">問一個問題會排入**兩支**片段：先墊詞，再答案。那是生產環境的序列——她說「讓我想想」，同時回覆在算，於是等待變成她正在做的一件事，而不是一個轉圈圈。在選完模型、做完管線化與快取之後，剩下的是真實運算，而剩下的招數就是把它蓋起來。</span>
+    </p>
+    <div class="grid two" style="align-items:start">
+      <div class="log" id="log"></div>
+      <div>
+        <p class="dim" style="font-size:14px">
+          <span data-l="en">Every line marked <b>handover</b> is a moment a visual defect can occur —
+            they all happen at a switch. Resting replays the same clip in place, which skips the
+            handover entirely, and the rotation is built around that.</span>
+          <span data-l="zh">每一行標著 <b>handover</b> 的地方，都是視覺缺陷可能發生的那一刻——它們全部發生在切換時。休息時是原地重播同一支片，完全跳過交接，而輪替就是圍繞這件事設計的。</span>
+        </p>
+        <p class="dim" style="font-size:14px">
+          <span data-l="en">The <b>!</b> button queues a clip that does not exist. Two bugs were found
+            by pressing it — a load failure mid-handover froze the player permanently, and the
+            recovery then chose the same broken clip again. Both were in the shipped component this
+            was extracted from, and the unit tests passed throughout.</span>
+          <span data-l="zh"><b>!</b> 按鈕會排入一支不存在的片段。有兩個 bug 是靠按它發現的——交棒進行中的載入失敗會讓播放器永久凍結，而它的恢復又會再挑同一支壞片段。兩個在被抽取的那個上線元件裡都存在，而單元測試從頭到尾都是綠的。</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:22px">
+      <p><span data-l="en"><b>The clip library is where the architecture gets tested, and it failed
+        three times before it passed.</b> Every clip here — idle, filler and answer — is rendered by
+        the same lip-sync engine over a <b>124</b>-frame base clip, with the audio padded to exactly
+        that length. Both halves matter. Padding is what makes a talking clip <em>end</em> on the
+        pivot: the engine renders <code>ceil(seconds × fps)</code> frames of the base from frame 0, so
+        without it the clip stops wherever the speech ran out. Leading silence is what makes it
+        <em>start</em> there — otherwise frame 0 already carries the first phoneme's mouth shape,
+        which measured <b>5.9</b> out of 255 in the mouth region while the whole-frame mean said
+        <b>3.19</b> and looked fine. And rendering the idle clips through the same engine is what
+        makes the two families match: the engine regenerates the mouth on every frame including
+        silence, and that generated mouth sits <b>6.22</b> from the untouched footage, so a library
+        mixing the two steps the jaw at every join between them.</span>
+        <span data-l="zh"><b>片庫才是這套架構真正被檢驗的地方，而它在通過之前失敗了三次。</b>
+        這裡每一支片——待機、墊詞、答覆——都是同一套對嘴引擎在一支 <b>124</b> 幀的底片上算出來的，
+        音訊補到剛好等於底片長度。兩件事缺一不可。補長度決定講話片<em>停</em>在樞紐幀：引擎會從第 0 幀
+        起算 <code>ceil(秒數 × fps)</code> 幀，不補就停在語音用完的那一格。前置靜音決定它<em>起</em>於
+        樞紐幀，否則第 0 幀已經帶著第一個音素的嘴型——量在嘴部區域是 <b>5.9</b>（滿分 255），而整幀
+        平均只有 <b>3.19</b>，看起來完全正常。而把待機片也送進同一套引擎，是為了讓兩個家族對得上：
+        引擎連靜音時都會重生嘴部，那張生成的嘴離原始素材 <b>6.22</b>，兩者混在同一個庫裡，
+        每一次跨家族的接點下巴都會跳一下。</span></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">Other things that surprised us</span><span data-l="zh">其他意外的發現</span></h2>
+    <div class="grid two">
+      <div class="card">
+        <h3><span data-l="en">The expensive part is the voice, not the video</span><span data-l="zh">貴的是聲音不是影像</span></h3>
+        <p><span data-l="en">People budget for the lip-sync model. The cloned-voice TTS cost more than
+          twice as much (5.1 GB vs 2.4 GB), and it is where the user’s waiting time goes:
+          <b>11.9 s</b> end to end for one sentence, of which lip-sync is <b>1.75 s</b>.</span>
+          <span data-l="zh">大家都在預算對嘴模型。克隆聲音 TTS 貴了兩倍多（5.1 GB 對 2.4 GB），而且使用者的等待時間也花在那裡：一句話端到端 <b>11.9 秒</b>，其中對嘴只佔 <b>1.75 秒</b>。</span></p>
+      </div>
+      <div class="card">
+        <h3><span data-l="en">Context costs almost as much as the model</span><span data-l="zh">上下文幾乎跟模型一樣貴</span></h3>
+        <p><span data-l="en">Going from Ollama’s 4096-token default to a 32k window increases an 8B
+          model’s footprint by <b>87%</b>. A companion needs a persona and a history, so this is
+          not optional.</span>
+          <span data-l="zh">從 Ollama 預設的 4096 token 拉到 32k 視窗，8B 模型的佔用<b>增加 87%</b>。伴侶需要人設與對話歷史，所以這筆錢躲不掉。</span></p>
+      </div>
+      <div class="card">
+        <h3><span data-l="en">On Windows your tools lie about capacity</span><span data-l="zh">在 Windows 上工具會騙你</span></h3>
+        <p><span data-l="en">Per-process VRAM does not exist under WDDM, and <code>ollama ps</code>
+          reported “17 GB, 100% GPU” where the measured delta was 11.5 GB. It never once said it
+          had offloaded anything. Throughput is the only honest fit signal.</span>
+          <span data-l="zh">WDDM 之下沒有 per-process 顯存，而 <code>ollama ps</code> 回報「17 GB，100% GPU」時實測 delta 是 11.5 GB。它一次都沒說過自己分流了。吞吐量是唯一誠實的訊號。</span></p>
+      </div>
+      <div class="card">
+        <h3><span data-l="en">Residency is cheap; concurrency is not</span><span data-l="zh">駐留便宜，併發才貴</span></h3>
+        <p><span data-l="en">A 27B model sitting resident — even one that filled the card to 98% —
+          cost nothing measurable. The same model actively generating made lip-sync
+          <b>1.6× slower</b>.</span>
+          <span data-l="zh">一顆 27B 模型駐留著、即使把卡填到 98%，成本量不出來。同一顆模型真的在生成時，讓對嘴<b>慢了 1.6 倍</b>。</span></p>
+      </div>
+      <div class="card">
+        <h3><span data-l="en">Composition decides how much GPU you need</span><span data-l="zh">構圖決定你需要多少 GPU</span></h3>
+        <p><span data-l="en">A widely-shared low-VRAM build runs lip-sync at 256×256 and its author
+          says the blur “basically isn’t noticeable” — true, <b>for their composition</b>: side-lit,
+          dark, subject to one side. Front-lit close-ups are the hardest case there is.</span>
+          <span data-l="zh">一個廣為分享的低顯存建置把對嘴跑在 256×256，作者說那個糊「基本上看不出來」——那是真的，<b>對他的構圖而言</b>：側光、偏暗、角色在一側。正面明亮的大特寫是最難的情況。</span></p>
+      </div>
+      <div class="card">
+        <h3><span data-l="en">3 of 4 lip-sync models forbid commercial use</span><span data-l="zh">四個對嘴模型有三個禁止商用</span></h3>
+        <p><span data-l="en">Including the one that makes the low-VRAM story work, and including two
+          that are Apache-2.0 on top and ship non-commercial face-detection weights underneath.
+          We audited this <b>after</b> recommending one of them.</span>
+          <span data-l="zh">包括讓低顯存故事成立的那一個，也包括兩個上層是 Apache-2.0、底下卻挾帶非商業臉部偵測權重的。我們是在<b>推薦了其中一個之後</b>才稽核出來的。</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-l="en">How to know these numbers are real</span><span data-l="zh">怎麼知道這些數字是真的</span></h2>
+    <p>
+      <span data-l="en">You should not take them on trust, and the repository is built so you do not
+        have to. Every figure carries where it came from:</span>
+      <span data-l="zh">你不該相信它們，而這個 repo 就是為了讓你不必相信而建的。每一個數字都帶著它的來源：</span>
+    </p>
+    <table>
+      <tbody>
+        <tr><td class="num"><span class="tag ok">recorded</span></td>
+          <td><span data-l="en">In the committed results file. You can check it.</span><span data-l="zh">在提交的結果檔裡。你可以查。</span></td></tr>
+        <tr><td class="num"><span class="tag warn">session</span></td>
+          <td><span data-l="en">Measured on this machine, but the tool wrote no file. Real, unverifiable by you — and a debt we owe.</span><span data-l="zh">在這台機器上量的，但工具沒有寫檔。是真的，但你無法查證——而那是一筆我們欠的債。</span></td></tr>
+        <tr><td class="num"><span class="tag">source</span></td>
+          <td><span data-l="en">From the source project’s engineering log, not re-measured here.</span><span data-l="zh">出自來源專案的工程紀錄，這裡沒有重新量過。</span></td></tr>
+        <tr><td class="num"><span class="tag no">third-party</span></td>
+          <td><span data-l="en">Someone else’s published number. Not verified.</span><span data-l="zh">別人發表的數字。未經驗證。</span></td></tr>
+      </tbody>
+    </table>
+    <p>
+      <span data-l="en">The tools that produced them are in the repository and run against any HTTP
+        service, not just ours. Each one’s header documents a way we measured it wrong first.</span>
+      <span data-l="zh">產生它們的工具都在 repo 裡，可以打任何 HTTP 服務，不限於我們的。每一支的檔頭都記錄著我們先前是怎麼量錯的。</span>
+    </p>
+    <p><a href="qa.html"><span data-l="en">More on what we got wrong →</span><span data-l="zh">更多我們搞錯的事 →</span></a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <span data-l="en">MIT for the code here. The models it measures have their own terms, several
+        of which restrict commercial use — see the licence map.</span>
+      <span data-l="zh">本 repo 的程式碼採 MIT。它所量測的模型各有自己的條款，其中好幾個限制商業使用——見授權地圖。</span>
+    </p>
+    <p>
+      <span data-l="en"><b>Xiaoxian and her footage are not MIT.</b> The character and every clip and
+        still of her are © 2026 Tangyi Studio, all rights reserved — a generated likeness derived
+        from a real person who owns it. They are published so the claims on this page can be checked
+        against real output, not as a free asset pack. Bring your own character; the pipeline is the
+        part you are being given.</span>
+      <span data-l="zh"><b>小嫻和她的影像不是 MIT。</b> 這個角色以及她的每一支片、每一張圖都是 © 2026 Tangyi Studio，保留一切權利——那是從一位真人衍生出來的生成肖像，權利屬於那個人。它們公開的用途只有一個：讓這一頁上的宣稱可以拿真實產出去核對，不是免費素材包。請用你自己的角色；這裡送你的是那條管線。</span>
+    </p>
+    <p>
+      <span data-l="en">Documents this project generates only <b>generated</b> characters. It does not
+        cover putting a real person’s likeness onto a synthetic body, and will not.</span>
+      <span data-l="zh">這份文件講的是<b>生成出來的</b>角色。它不涵蓋把真人臉孔套到合成身體上，也不會加入。</span>
+    </p>
+    <p>
+      <span data-l="en">Free to use, modify and sell, with one condition: <b>say you used it.</b>
+        A visible credit to Tangyi Studio in whatever you ship — an about page, a footer, a
+        readme — is all that is asked. You do not need permission and you do not owe anything.</span>
+      <span data-l="zh">可以自由使用、修改、販售，只有一個條件：<b>要說你用了。</b> 在你交付的東西裡放一行看得見的 Tangyi Studio 出處——關於頁、頁尾、readme 都可以。不必取得同意，也不必付費。</span>
+    </p>
+    <p style="margin-top:20px">
+      <b><span data-l="en">Built by</span><span data-l="zh">由</span>
+        <a href="https://github.com/tangyistudio">Tangyi Studio</a></b> ·
+      <a href="https://github.com/tangyistudio/local-ai-girlfriend">GitHub</a> ·
+      <a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.md">Licences</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.zh-TW.md">授權</a> ·
+      <a href="qa.html">Q&amp;A</a>
+    </p>
+  </div>
+</footer>
+
+<script src="site/lang.js"></script>
+<script type="module">
+  import { mountDemo } from './site/demo.js';
+  mountDemo({
+    els: {
+      a: document.getElementById('va'),
+      b: document.getElementById('vb'),
+      poster: document.getElementById('poster'),
+      log: document.getElementById('log'),
+      blocked: document.getElementById('blocked'),
+      demo: document.getElementById('demo'),
+      chatLog: document.getElementById('chatLog'),
+      lookTag: document.getElementById('lookTag'),
+      lookButtons: document.querySelectorAll('button.look'),
+      askButtons: document.querySelectorAll('button.ask'),
+      sizeButtons: document.querySelectorAll('button.size'),
+      fullButton: document.getElementById('bFull'),
+      breakButton: document.getElementById('bBreak'),
+    },
+  });
+</script>
+</html>

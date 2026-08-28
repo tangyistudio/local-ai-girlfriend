@@ -1,0 +1,49 @@
+{
+  "model": "qwen3:8b",
+  "rows": [
+    {
+      "ctx": 4096,
+      "floor_min": 6210,
+      "floor_max": 6711,
+      "loaded_min": 11944,
+      "loaded_max": 12288,
+      "delta_mib": 5233,
+      "load_s": 3.17,
+      "ollama_processor": "GB 100%",
+      "eval_count": 16
+    },
+    {
+      "ctx": 8192,
+      "floor_min": 6202,
+      "floor_max": 6398,
+      "loaded_min": 12272,
+      "loaded_max": 12503,
+      "delta_mib": 5874,
+      "load_s": 3.42,
+      "ollama_processor": "GB 100%",
+      "eval_count": 16
+    },
+    {
+      "ctx": 16384,
+      "floor_min": 6112,
+      "floor_max": 6315,
+      "loaded_min": 13366,
+      "loaded_max": 13639,
+      "delta_mib": 7051,
+      "load_s": 3.41,
+      "ollama_processor": "GB 100%",
+      "eval_count": 16
+    },
+    {
+      "ctx": 32768,
+      "floor_min": 5964,
+      "floor_max": 6100,
+      "loaded_min": 15864,
+      "loaded_max": 16348,
+      "delta_mib": 9764,
+      "load_s": 3.41,
+      "ollama_processor": "GB 100%",
+      "eval_count": 16
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>pivot-frame player</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; background: #0b0e14; color: #c8d0dd;
+    font: 14px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: grid; place-items: center; min-height: 100vh; padding: 24px;
+  }
+  .wrap { display: grid; gap: 18px; width: min(880px, 100%); }
+  /* ⚠️ isolation:isolate is not decoration. The player sets z-index on both
+     video elements to control which is on top. Without a stacking context here
+     those z-indexes apply globally and the video covers your entire UI - which
+     has happened: the whole interface was still in the DOM and invisible. */
+  .stage {
+    position: relative; isolation: isolate; overflow: hidden;
+    aspect-ratio: 9 / 16; width: 100%; max-width: 300px; margin: 0 auto;
+    border-radius: 14px; background: #11151c;
+  }
+  .stage > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  button {
+    background: #1a2130; color: #c8d0dd; border: 1px solid #2b3444;
+    border-radius: 8px; padding: 8px 14px; font: inherit; cursor: pointer;
+  }
+  button:hover { background: #222a3b; }
+  .log {
+    font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: #0e121a; border: 1px solid #1c2432; border-radius: 10px;
+    padding: 12px 14px; height: 190px; overflow: auto; white-space: pre-wrap;
+  }
+  .note { color: #7c8798; max-width: 62ch; margin: 0 auto; text-align: center; }
+  b { color: #e6ecf5; }
+</style>
+
+<div class="wrap">
+  <p class="note">
+    The real player, running the real code. <b>Everything is pre-rendered</b> —
+    nothing is generated when you click, so this shows what the output looks
+    like and how playback behaves, not what the wait is. Asking a question
+    plays a filler clip and then the answer, which is the production sequence.
+  </p>
+
+  <div class="demo" id="demo" data-size="m"><div class="stage" id="stage">
+    <!-- The poster sits behind both videos. If a handover ever leaves both
+         layers blank, what shows through is the pivot frame - which is
+         indistinguishable from a normal frame, because it is one. -->
+    <img id="poster" alt="" aria-hidden="true" style="display:none">
+    <video id="a" playsinline></video>
+    <video id="b" playsinline></video>
+  </div></div>
+
+  <div class="row">
+    <button class="look" data-look="knit" aria-pressed="true">Knit sweater</button>
+    <button class="look" data-look="shirt" aria-pressed="false">Blouse</button>
+    <button class="look" data-look="pj" aria-pressed="false">Nightwear</button>
+  </div>
+  <div class="row">
+    <button class="size" data-size="s" aria-pressed="false">S</button>
+    <button class="size" data-size="m" aria-pressed="true">M</button>
+    <button class="size" data-size="l" aria-pressed="false">L</button>
+    <button id="full" aria-pressed="false">Fullscreen</button>
+  </div>
+  <div class="row">
+    <button class="ask" data-q="0">"What are you doing right now?"</button>
+    <button class="ask" data-q="1">"Do you ever get tired?"</button>
+    <button class="ask" data-q="2">"Do you like talking like this?"</button>
+    <button id="break">Add a broken clip</button>
+  </div>
+
+  <div class="chat-head"><b>Xiaoxian</b> <span class="tag" id="lookTag"></span></div>
+  <div class="chat-log" id="chatLog"></div>
+
+  <div class="log" id="log"></div>
+
+  <p class="note">
+    The rotation rests on <b>demo_still</b> and replays it in place between
+    gestures. A replay is the zero-handover path - no source change, no waiting
+    for a frame, no crossfade - so none of the failure modes can occur there.
+    Every log line marked <b>handover</b> is a moment where they can.
+  </p>
+</div>
+
+<script type="module">
+  // Shares the exact wiring the project page uses, so the two can never drift.
+  import { mountDemo } from '../../site/demo.js';
+  mountDemo({
+    els: {
+      a: document.getElementById('a'),
+      b: document.getElementById('b'),
+      poster: document.getElementById('poster'),
+      log: document.getElementById('log'),
+      demo: document.getElementById('demo'),
+      chatLog: document.getElementById('chatLog'),
+      lookTag: document.getElementById('lookTag'),
+      lookButtons: document.querySelectorAll('button.look'),
+      askButtons: document.querySelectorAll('button.ask'),
+      sizeButtons: document.querySelectorAll('button.size'),
+      fullButton: document.getElementById('full'),
+      breakButton: document.getElementById('break'),
+    },
+  });
+</script>

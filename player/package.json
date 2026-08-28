@@ -1,0 +1,47 @@
+{
+  "name": "pivot-frame-player",
+  "version": "0.1.0",
+  "description": "Cut between short video clips of the same subject without a visible seam, given a library where every clip starts and ends on the same frame.",
+  "type": "module",
+  "sideEffects": false,
+  "license": "MIT",
+  "author": "Tangyi Studio",
+  "exports": {
+    ".": "./src/index.js",
+    "./react": "./react/index.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./src/index.js",
+  "files": [
+    "src",
+    "react",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "video",
+    "playback",
+    "seamless",
+    "crossfade",
+    "double-buffer",
+    "talking-head",
+    "lip-sync",
+    "clip-library",
+    "pivot-frame",
+    "react",
+    "zero-dependency"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

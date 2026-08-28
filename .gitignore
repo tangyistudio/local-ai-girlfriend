@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Measurement output that is machine-specific.
+# bench/results.json IS committed - it is the evidence behind the docs.
+# Anything you generate on your own hardware is not ours to carry.
+bench/results.local.json
+bench/*.local.json
+
+# OS
+Thumbs.db
+.DS_Store
+
+# watchdog runtime state
+.watchdog/
+
+# local service config - never commit
+.env
+
+# editor/agent local config
+.claude/
+
+# scratch from clip verification runs - large, regenerable
+.diag/
+.check-frames/
