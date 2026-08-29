@@ -177,7 +177,10 @@ export function mountDemo({ els }) {
         document.documentElement.getAttribute('data-lang') === 'zh'
           ? look.labelZh : look.label;
     }
-    stage.setPool(poolFor(look));
+    // ⚠️ switchPoolNow, not setPool. setPool leaves the current clip playing to
+    // its end, so the outfit changed up to five seconds after the click.
+    stage.switchPoolNow(poolFor(look));
+    setAsking(false);
     log(`look        ${key}`);
     for (const b of els.lookButtons || []) {
       b.setAttribute('aria-pressed', String(b.dataset.look === key));

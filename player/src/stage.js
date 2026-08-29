@@ -87,6 +87,7 @@ export class PivotStage {
      * a clip jumping to another clip's first frame mid-motion.
      */
     this.handingTo = null;
+    this._nextFadeMs = null;
     this.listeners = {};
 
     for (const el of [a, b]) {
@@ -134,6 +135,44 @@ export class PivotStage {
     if (fresh) this.queue.reset();
     this.queue.sync(items);
     this._preload();
+  }
+
+  /**
+   * Replace the rotation pool and cut to it NOW.
+   *
+   * ⚠️ `setPool` on its own does not switch anything a viewer can see. It
+   * changes which clips are ELIGIBLE, and the clip already on screen keeps
+   * playing to its end - up to five seconds of the old look after the user
+   * asked for the new one. Reported as "switching outfits takes ages", which is
+   * exactly what it was.
+   *
+   * ⚠️ The fade here is deliberately longer than the seam fade, and it is a
+   * different thing. The seam fade hides a few units of drift between two
+   * frames of the same person. This one crosses between two different people:
+   * measured, two looks sit 50.6 mean and 202 worst-block apart. At 120 ms that
+   * reads as a glitch; given a beat, it reads as a cut. Anything in flight from
+   * the old look is dropped, because finishing a sentence in the previous
+   * outfit is worse than not finishing it.
+   */
+  switchPoolNow(clips, { fadeMs = 220 } = {}) {
+    this.setPool(clips);
+    this.queue.reset();
+    this.queue.sync([]);
+    const cur = this._frontEl();
+    if (cur) {
+      try { cur.pause(); } catch { /* some browsers refuse; harmless */ }
+      this.playing = cur.dataset.src || this.playing;
+    }
+    // ⚠️ The back element is very likely preloaded with the OLD pool. Clear its
+    // marker so the handover cannot decide it already holds what it needs.
+    const back = this._backEl();
+    if (back) delete back.dataset.src;
+    // ⚠️ Not "set, call, restore". _onEnded arranges an ASYNC handover that
+    // reads this.reactionFadeMs when the incoming clip is ready - long after a
+    // synchronous restore would have put the old value back, so the longer fade
+    // this method exists to apply would never have been used.
+    this._nextFadeMs = fadeMs;
+    this._onEnded();
   }
 
   /**
@@ -353,8 +392,12 @@ export class PivotStage {
        * element until the incoming one has painted - so nothing is given up.
        */
       const intoSpeech = speaking;
-      const fadeMs = (wasSpeaking || intoSpeech)
-        ? this.speechFadeMs : this.reactionFadeMs;
+      // A one-shot override, consumed here, set by switchPoolNow for the
+      // cross-look transition.
+      const oneShot = this._nextFadeMs;
+      this._nextFadeMs = null;
+      const fadeMs = oneShot != null ? oneShot
+        : ((wasSpeaking || intoSpeech) ? this.speechFadeMs : this.reactionFadeMs);
       if (cur && fadeMs <= 0) {
         // Hard cut: on top immediately, outgoing left underneath until a frame
         // has actually been presented. See promote() for why this order and not
