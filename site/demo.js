@@ -123,7 +123,7 @@ export function mountDemo({ els }) {
     if (busy) {
       unlockTimer = setTimeout(() => {
         log('unlocked    no idle event arrived — releasing the buttons');
-      pending = null;
+        pending = null;
         for (const b of els.askButtons || []) b.disabled = false;
       }, 20000);
     }
@@ -134,7 +134,7 @@ export function mountDemo({ els }) {
   stage.on('speakstart', (u) => {
     log(`speaking    ${u.split('/').pop()}`);
     if (pending && u === pending.url) {
-        bubble('her', pending.q.answerEn, pending.q.answerZh);
+      bubble('her', pending.q.answerEn, pending.q.answerZh);
       pending = null;
     }
   });
