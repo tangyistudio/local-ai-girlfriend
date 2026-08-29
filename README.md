@@ -4,11 +4,14 @@
 
 繁體中文版：[README.zh-TW.md](README.zh-TW.md)
 
-![The demo character speaking, two of her three looks](site/img/demo.gif)
+**[Try the live demo](https://tangyistudio.github.io/local-ai-girlfriend/)** — ask her a question, switch outfits,
+watch the seam that is not there.
+
+[![The demo character speaking, two of her three looks](site/img/demo.gif)](https://tangyistudio.github.io/local-ai-girlfriend/)
 
 *Xiaoxian, the demo character. Both clips came out of the pipeline this
-repository documents, on one RTX A5000; sound, size controls and the rest of the
-demo are on the project page. She is named so the demo reads as a conversation
+repository documents, on one RTX A5000; sound, size controls and the rest of the demo are on
+the [project page](https://tangyistudio.github.io/local-ai-girlfriend/). She is named so the demo reads as a conversation
 rather than a video player, and that is the whole of her: no backstory, no
 personality spec, no dialogue rules ship here.*
 

@@ -3,10 +3,12 @@
 
 English: [README.md](README.md)
 
-![展示角色正在說話，三套外觀中的兩套](site/img/demo.gif)
+**[開啟線上 demo](https://tangyistudio.github.io/local-ai-girlfriend/)** —— 問她一句話、切換服裝、看那個不存在的接縫。
+
+[![展示角色正在說話，三套外觀中的兩套](site/img/demo.gif)](https://tangyistudio.github.io/local-ai-girlfriend/)
 
 *示範角色小嫻。兩支片都是這個 repo 所記載的管線在一張 RTX A5000 上算出來的，聲音、
-尺寸切換和其餘的互動在專案頁上。取名字是為了讓這個示範讀起來像一段對話、而不是一個
+尺寸切換和其餘的互動在[專案頁](https://tangyistudio.github.io/local-ai-girlfriend/)上。取名字是為了讓這個示範讀起來像一段對話、而不是一個
 影片播放器，而她的全部就到這裡為止：這個 repo 不附帶任何背景設定、人格規格或對話規則。*
 
 > **她不是 MIT。** 小嫻以及她的每一支片、每一張圖都是 © 2026 Tangyi Studio，
