@@ -86,3 +86,42 @@ test('pickOther degrades instead of returning undefined', () => {
   assert.equal(pickOther(['only.mp4'], ['only.mp4', 'only.mp4'], () => 0), 'only.mp4');
   assert.equal(pickOther(['a.mp4'], [], () => 0.999), 'a.mp4');
 });
+
+// ⚠️ The replay branch only fires while holdLeft > 0, and holdLeft is derived
+// from the hold window divided by the measured still-clip duration. With the
+// defaults it lands on 0 after one rest, so both tests below have to put the
+// picker into the state they mean to test - a short still clip inside a long
+// hold window - rather than assume it.
+function resting() {
+  const p = new MoodPicker({
+    isStill: (u) => u.includes('still'),
+    holdMinS: 20, holdMaxS: 20, rng: () => 0,
+  });
+  p.noteStillDuration(1);        // 20 / 1 -> holdLeft 19 after the rest pick
+  return p;
+}
+
+test('replay-in-place returns the still clip while it is in the pool', () => {
+  const p = resting();
+  const pool = ['a_still.mp4', 'a_nod.mp4'];
+  p.pick(pool, 'a_nod.mp4', true);             // motion -> go and rest
+  assert.equal(p.pick(pool, 'a_still.mp4', true), 'a_still.mp4',
+    'a still clip in the pool must be replayed in place');
+});
+
+test('pick never returns a clip from outside the pool it was given', () => {
+  // ⚠️ Regression. That same replay branch returned `current` unchanged without
+  // checking it was still in the pool, so replacing the pool - which is what
+  // switching outfits does - handed back a clip from the previous one. The
+  // caller saw "next is already playing", took the replay path, and the switch
+  // silently did nothing: the label and backdrop changed, the video did not.
+  const p = resting();
+  const oldPool = ['a_still.mp4', 'a_nod.mp4'];
+  const newPool = ['b_still.mp4', 'b_nod.mp4'];
+
+  p.pick(oldPool, 'a_nod.mp4', true);          // rest, so holdLeft > 0
+  const got = p.pick(newPool, 'a_still.mp4', true);
+
+  assert.ok(newPool.includes(got),
+    `pick returned ${got}, which is not in the pool it was given`);
+});

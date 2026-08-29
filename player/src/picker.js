@@ -95,6 +95,23 @@ export class MoodPicker {
   pick(pool, current, commit = false) {
     const usable = this.broken ? pool.filter((u) => !this.broken.has(u)) : pool;
     if (!usable.length) return null;
+
+    /**
+     * ⚠️ A clip that is no longer in the pool is not "current" for any purpose
+     * here, and treating it as such returns a URL the caller did not offer.
+     *
+     * The replay-in-place branch below returns `current` unchanged. That is the
+     * cheapest and safest path in the whole player - until the pool is replaced
+     * underneath it. Then it hands back a clip from the OLD pool, the caller
+     * sees "next === what is already playing", takes the replay path, and
+     * nothing switches. Observed as an outfit change that did not happen: the
+     * label and the backdrop changed, the video did not.
+     *
+     * The rule this restores: pick() only ever returns something from the pool
+     * it was given.
+     */
+    if (current && !usable.includes(current)) current = null;
+
     if (usable.length === 1) return usable[0];
 
     const take = (url) => {
