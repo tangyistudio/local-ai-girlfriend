@@ -21,6 +21,13 @@
 <meta name="twitter:title" content="Q&amp;A - what a self-hosted AI companion actually costs">
 <meta name="twitter:description" content="Straight answers about running a companion stack on your own GPU: what fits, what it costs, what we got wrong, and how to check every number yourself.">
 <meta name="twitter:image" content="https://tangyistudio.github.io/local-ai-girlfriend/site/img/og.png">
+<!-- ⚠️ Both languages ship in the HTML and CSS hides one, so a crawler sees
+     the inactive language as hidden text and discounts it. These declare that
+     the zh-TW content exists at its own address, which is the only fix
+     available without a build step or a server. -->
+<link rel="alternate" hreflang="en" href="https://tangyistudio.github.io/local-ai-girlfriend/qa.html?lang=en">
+<link rel="alternate" hreflang="zh-Hant" href="https://tangyistudio.github.io/local-ai-girlfriend/qa.html?lang=zh">
+<link rel="alternate" hreflang="x-default" href="https://tangyistudio.github.io/local-ai-girlfriend/qa.html">
 <link rel="canonical" href="https://tangyistudio.github.io/local-ai-girlfriend/qa.html">
 <link rel="icon" type="image/png" href="site/img/favicon.png">
 <link rel="stylesheet" href="site/style.css">

@@ -21,6 +21,13 @@
 <meta name="twitter:title" content="What a self-hosted AI companion actually costs, measured">
 <meta name="twitter:description" content="VRAM per component, end-to-end latency, and what actually fits in 8/16/24/32 GB. Measured on one consumer GPU, with the harness and raw readings committed.">
 <meta name="twitter:image" content="https://tangyistudio.github.io/local-ai-girlfriend/site/img/og.png">
+<!-- ⚠️ Both languages ship in the HTML and CSS hides one, so a crawler sees
+     the inactive language as hidden text and discounts it. These declare that
+     the zh-TW content exists at its own address, which is the only fix
+     available without a build step or a server. -->
+<link rel="alternate" hreflang="en" href="https://tangyistudio.github.io/local-ai-girlfriend/?lang=en">
+<link rel="alternate" hreflang="zh-Hant" href="https://tangyistudio.github.io/local-ai-girlfriend/?lang=zh">
+<link rel="alternate" hreflang="x-default" href="https://tangyistudio.github.io/local-ai-girlfriend/">
 <link rel="canonical" href="https://tangyistudio.github.io/local-ai-girlfriend/">
 <link rel="icon" type="image/png" href="site/img/favicon.png">
 <link rel="stylesheet" href="site/style.css">
@@ -129,6 +136,52 @@ python bench/vram.py baseline --label desktop-only --seconds 20</code></pre>
         that decides anything.</span>
       <span data-l="zh">這套量測腳本可以打任何 HTTP 服務，不限於這裡的。指向你自己的堆疊，它會告訴你你的卡實際佔了多少——那才是唯一能拿來做決定的數字。</span>
     </p>
+    </div>
+  </div>
+</section>
+
+<section id="fit">
+  <div class="wrap">
+    <h2><span data-l="en">Who this is for</span><span data-l="zh">這適合誰</span></h2>
+    <p><span data-l="en">Scope, stated up front rather than discovered on page four. Everything in
+      the right-hand column is a deliberate limit, not a gap we intend to close.</span>
+      <span data-l="zh">範圍寫在前面，而不是讓你讀到第四頁才發現。右欄每一項都是刻意畫的界線，不是我們打算補上的缺口。</span></p>
+
+    <div class="fitgrid">
+      <div class="card">
+        <h3><span data-l="en">Read this if</span><span data-l="zh">這適合你，如果</span></h3>
+        <ul>
+          <li><span data-l="en">You own one consumer card and want to know what fits <em>before</em> you
+            buy the next one.</span>
+            <span data-l="zh">你有一張消費級顯卡，想在買下一張<em>之前</em>知道什麼裝得下。</span></li>
+          <li><span data-l="en">You were about to add up component sizes from someone's guide. That
+            arithmetic is wrong and this page shows why.</span>
+            <span data-l="zh">你正打算把某份指南上的元件大小加總起來。那個算法是錯的，這一頁說明為什麼。</span></li>
+          <li><span data-l="en">You want to ship something and need to know which model licences
+            actually permit that.</span>
+            <span data-l="zh">你想拿它去出貨，需要知道哪些模型授權真的允許。</span></li>
+          <li><span data-l="en">You are cutting between pre-rendered clips and the joins show.</span>
+            <span data-l="zh">你在預錄片段之間切換，而接縫看得出來。</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span data-l="en">Do not read this if</span><span data-l="zh">這不適合你，如果</span></h3>
+        <ul>
+          <li><span data-l="en">You want a one-click installer. This is not one and is not becoming
+            one.</span>
+            <span data-l="zh">你要的是一鍵安裝。這不是，而且也不會變成那個。</span></li>
+          <li><span data-l="en">You want to put a real person's face on a synthetic body. No tooling
+            for that ships here and none will.</span>
+            <span data-l="zh">你想把真人的臉套到合成的身體上。這裡不附任何那種工具，以後也不會。</span></li>
+          <li><span data-l="en">You need Linux, multi-GPU, or cloud numbers. One machine, one OS —
+            see <a href="#not-measured">what these numbers do not measure</a>.</span>
+            <span data-l="zh">你需要 Linux、多卡或雲端的數字。這裡只有一台機器、一個作業系統——見<a href="#not-measured">這些數字沒有量到什麼</a>。</span></li>
+          <li><span data-l="en">You want the demo character. She is not part of the licence and not a
+            reusable asset.</span>
+            <span data-l="zh">你要的是那個示範角色。她不在授權範圍內，也不是可再利用的素材。</span></li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -354,6 +407,69 @@ python bench/vram.py baseline --label desktop-only --seconds 20</code></pre>
           <span data-l="zh">包括讓低顯存故事成立的那一個，也包括兩個上層是 Apache-2.0、底下卻挾帶非商業臉部偵測權重的。我們是在<b>推薦了其中一個之後</b>才稽核出來的。</span></p>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="versus">
+  <div class="wrap">
+    <h2><span data-l="en">What the guides say, and what we measured</span><span data-l="zh">指南這樣說，我們量到的是這樣</span></h2>
+    <p><span data-l="en">Against the claim, never the author. Every one of these is something we
+      believed, published, or read somewhere first — including the first row, which is our own
+      retracted prediction.</span>
+      <span data-l="zh">對事不對人。這裡每一條都是我們自己曾經相信、發布過、或在某處讀到的——包括第一列，那是我們自己被撤回的預測。</span></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th><span data-l="en">The claim</span><span data-l="zh">那個說法</span></th>
+          <th><span data-l="en">What we measured</span><span data-l="zh">我們量到的</span></th>
+          <th><span data-l="en">Provenance</span><span data-l="zh">出處</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span data-l="en">"8 GB is impossible — the TTS alone is 5.1 GB."</span>
+              <span data-l="zh">「8 GB 不可能——光 TTS 就 5.1 GB。」</span></td>
+          <td><span data-l="en">Speech and lip-sync ran together in <b>7,052–7,615 of 8,192 MiB</b>.
+            The same TTS shrank to 2.7 GB when the card was constrained. We published the wrong
+            prediction and it is still in the docs.</span>
+            <span data-l="zh">語音與對嘴一起跑在 <b>8,192 MiB 之中的 7,052–7,615</b>。同一個 TTS 在卡被限制時縮到 2.7 GB。那個錯誤預測是我們自己發布的，而且還留在文件裡。</span></td>
+          <td><span class="tag ok">recorded</span></td>
+        </tr>
+        <tr>
+          <td><span data-l="en">"Budget for the lip-sync model — that is the expensive part."</span>
+              <span data-l="zh">「預算抓在對嘴模型上——那才是貴的。」</span></td>
+          <td><span data-l="en">The cloned-voice TTS costs <b>2×</b> the lip-sync service in VRAM,
+            and speech synthesis is where the wait is.</span>
+            <span data-l="zh">克隆聲音 TTS 的顯存是對嘴服務的 <b>2 倍</b>，而等待也花在語音合成上。</span></td>
+          <td><span class="tag ok">recorded</span></td>
+        </tr>
+        <tr>
+          <td><span data-l="en">"Add up the component sizes to size your card."</span>
+              <span data-l="zh">「把元件大小加總起來，就知道要多大的卡。」</span></td>
+          <td><span data-l="en">Components do not have a fixed size. Allocators shrink to fit, so
+            the sum measured on a big card tells you a small card cannot do something it can.</span>
+            <span data-l="zh">元件沒有固定大小。配置器會縮小去適應，所以在大卡上量到的總和，會讓你以為小卡做不到它其實做得到的事。</span></td>
+          <td><span class="tag ok">recorded</span></td>
+        </tr>
+        <tr>
+          <td><span data-l="en">"These lip-sync models are Apache-2.0."</span>
+              <span data-l="zh">「這些對嘴模型是 Apache-2.0。」</span></td>
+          <td><span data-l="en"><b>3 of 4</b> carry non-commercial constraints, and two of those ship
+            an Apache licence on top of face-detection weights that are not.</span>
+            <span data-l="zh"><b>4 個裡有 3 個</b>帶著非商用限制，其中兩個是在非商用的臉部偵測權重上面，蓋了一張 Apache 授權。</span></td>
+          <td><span class="tag ok">recorded</span></td>
+        </tr>
+        <tr>
+          <td><span data-l="en">"Your tools will tell you if a model does not fit."</span>
+              <span data-l="zh">「工具會告訴你模型裝不裝得下。」</span></td>
+          <td><span data-l="en">On Windows they reported <b>"17 GB, 100% GPU"</b> against a measured
+            delta of 11.5 GB, and never once said they had offloaded anything.</span>
+            <span data-l="zh">在 Windows 上，工具回報 <b>「17 GB，100% GPU」</b>，而實測 delta 是 11.5 GB，而且它一次都沒說過自己分流了。</span></td>
+          <td><span class="tag ok">recorded</span></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </section>
 

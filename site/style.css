@@ -159,11 +159,15 @@ td.num { font-family: var(--mono); white-space: nowrap; }
 }
 
 .row { display: flex; gap: 8px; flex-wrap: wrap; }
-button.act {
+/* ⚠️ `.act`, not `button.act`. The 404 page uses anchors for its four escape
+ * routes and they rendered as bare text links, because the rule was bound to
+ * the element rather than the role. */
+.act {
+  display: inline-block; text-decoration: none;
   background: #1a2130; color: var(--text); border: 1px solid var(--line-2);
   border-radius: 8px; padding: 7px 13px; font: inherit; font-size: 14px; cursor: pointer;
 }
-button.act:hover { background: #222a3b; color: var(--bright); }
+.act:hover { background: #222a3b; color: var(--bright); }
 
 footer { padding: 40px 0 64px; color: var(--dim); font-size: 14px; }
 footer a { color: var(--dim); }

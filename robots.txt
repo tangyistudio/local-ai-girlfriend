@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tangyistudio.github.io/local-ai-girlfriend/sitemap.xml
