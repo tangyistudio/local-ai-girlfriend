@@ -124,6 +124,8 @@ export function afterFirstFrame(el, cb, { capMs = 400 } = {}) {
  * Promote first, then play, then call `retire` once a frame has been presented.
  */
 export function promote(incoming, outgoing) {
+  cancelHide(incoming);
+  cancelHide(outgoing);
   outgoing.style.zIndex = '0';
   outgoing.style.transition = '';
   outgoing.style.opacity = '1';
@@ -134,6 +136,7 @@ export function promote(incoming, outgoing) {
 
 /** Drop the outgoing element. Safe only once the incoming one has painted. */
 export function retire(outgoing) {
+  cancelHide(outgoing);
   outgoing.style.transition = '';
   outgoing.style.opacity = '0';
 }
@@ -163,7 +166,25 @@ export function retire(outgoing) {
  */
 const HOLD_MS = 120;
 
+/**
+ * Cancel a pending "hide this element" timer.
+ *
+ * ⚠️ Both transition paths hide the outgoing element on a timer. If a SECOND
+ * handover starts before that timer fires - which is exactly what rapid outfit
+ * switching does - the timer from the first one fires against an element the
+ * second one has since promoted to the front, and hides the picture that is
+ * supposed to be visible. Observed: switch looks three times quickly and both
+ * video layers end at opacity 0, leaving only the backdrop.
+ *
+ * So every promotion cancels whatever hide was queued against that element.
+ */
+function cancelHide(el) {
+  if (el && el._hideTimer) { clearTimeout(el._hideTimer); el._hideTimer = null; }
+}
+
 export function crossfade(incoming, outgoing, ms) {
+  cancelHide(incoming);
+  cancelHide(outgoing);
   if (ms <= 0) {
     outgoing.style.zIndex = '0';
     incoming.style.zIndex = '1';
@@ -187,7 +208,10 @@ export function crossfade(incoming, outgoing, ms) {
      */
     outgoing.style.transition = '';
     outgoing.style.opacity = '1';
-    setTimeout(() => { outgoing.style.opacity = '0'; }, HOLD_MS);
+    outgoing._hideTimer = setTimeout(() => {
+      outgoing._hideTimer = null;
+      outgoing.style.opacity = '0';
+    }, HOLD_MS);
     return;
   }
 
@@ -211,7 +235,8 @@ export function crossfade(incoming, outgoing, ms) {
   incoming.style.transition = `opacity ${ms}ms linear`;
   incoming.style.opacity = '1';
 
-  setTimeout(() => {
+  outgoing._hideTimer = setTimeout(() => {
+    outgoing._hideTimer = null;
     outgoing.style.opacity = '0';
   }, ms + 20);
 }

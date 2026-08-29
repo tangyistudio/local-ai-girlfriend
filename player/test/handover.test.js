@@ -89,3 +89,29 @@ test('a fade sets no transition on the element that must not move', () => {
   crossfade(inc, out, 200);
   assert.equal(out.style.transition, '');
 });
+
+test('a second handover cancels the first one hide timer', async () => {
+  // ⚠️ Regression. Both transition paths hide the outgoing element on a timer.
+  // A second handover starting before that timer fires used to let it run
+  // against an element the second handover had just promoted - hiding the
+  // picture that was supposed to be visible. Switching outfits three times
+  // quickly left BOTH layers at opacity 0 and only the backdrop showing.
+  const a = fakeEl('a');
+  const b = fakeEl('b');
+
+  crossfade(a, b, 120);          // a incoming, b outgoing, hide b in 140ms
+  crossfade(b, a, 120);          // reversed before that fires
+
+  await new Promise((r) => setTimeout(r, 200));
+  assert.equal(b.style.opacity, '1',
+    'b was promoted by the second handover and must not be hidden by the first');
+});
+
+test('hard cut cancels a pending hide the same way', async () => {
+  const a = fakeEl('a');
+  const b = fakeEl('b');
+  crossfade(a, b, 0);            // schedules b hidden at HOLD_MS
+  promote(b, a);                 // b promoted straight back
+  await new Promise((r) => setTimeout(r, 200));
+  assert.equal(b.style.opacity, '1', 'the stale hold timer must not hide b');
+});
