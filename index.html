@@ -25,18 +25,21 @@
 <link rel="icon" type="image/png" href="site/img/favicon.png">
 <link rel="stylesheet" href="site/style.css">
 
+<a class="skip" href="#main"><span data-l="en">Skip to content</span><span data-l="zh">跳至內容</span></a>
+<span id="top"></span>
 <header class="top">
   <div class="wrap">
     <span class="brand"><a href="./">local-ai-girlfriend</a></span>
     <nav>
       <a href="./" aria-current="page"><span data-l="en">Overview</span><span data-l="zh">總覽</span></a>
       <a href="qa.html"><span data-l="en">Q&amp;A</span><span data-l="zh">問答</span></a>
-      <a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.md">Docs</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.zh-TW.md">文件</a>
+      <a href="#tiers"><span data-l="en">Tiers</span><span data-l="zh">分級</span></a><a href="#provenance"><span data-l="en">Method</span><span data-l="zh">方法</span></a><a href="#docs"><span data-l="en">Docs</span><span data-l="zh">文件</span></a><a href="https://github.com/tangyistudio/local-ai-girlfriend" aria-label="GitHub">GitHub</a>
       <button class="langbtn" type="button">中文</button>
     </nav>
   </div>
 </header>
 
+<main id="main">
 <section class="hero-sec">
   <div class="wrap">
     <h1>
@@ -115,11 +118,22 @@
           <span data-l="zh"><b>這是模擬。</b> 答覆是事先算好存成檔案的，所以你按下去播的是一支本來就存在的影片——瀏覽器裡沒有模型在跑，也沒有呼叫任何伺服器。它給你看的是產出與播放，關於<em>速度</em>它什麼都沒告訴你：這裡根本沒有運算可言，而這個頁面的前一版還比真實情況更慢，因為它讓你先看完一支「讓我想想」——那支片在蓋一段不存在的等待。<b>把同一個播放器接上你自己的 LLM 端點，它就會即時運作。</b>那條路的代價是量出來的、不是模擬的，寫在延遲那一頁：在這裡量的卡上，一句話端到端 <b>11.9 秒</b>——墊詞片就是為了那個數字存在的。</span>
         </p>
       </div>
+    <div class="cmd">
+      <pre><code>git clone https://github.com/tangyistudio/local-ai-girlfriend
+python bench/vram.py baseline --label desktop-only --seconds 20</code></pre>
+      <button type="button" id="copyCmd" aria-label="Copy command">copy</button>
+    </div>
+    <p class="dim" style="font-size:13px;margin-top:8px">
+      <span data-l="en">The harness runs against any HTTP service, not just this one. Point it at
+        your own stack and it will tell you what your card is holding — which is the only number
+        that decides anything.</span>
+      <span data-l="zh">這套量測腳本可以打任何 HTTP 服務，不限於這裡的。指向你自己的堆疊，它會告訴你你的卡實際佔了多少——那才是唯一能拿來做決定的數字。</span>
+    </p>
     </div>
   </div>
 </section>
 
-<section>
+<section id="looks">
   <div class="wrap">
     <h2><span data-l="en">Three looks, one pivot frame each</span><span data-l="zh">三套外觀，各自一張樞紐幀</span></h2>
     <p><span data-l="en">Switching outfit is not a costume change on one video. Each look is its own
@@ -158,7 +172,7 @@
   </div>
 </section>
 
-<section>
+<section id="finding">
   <div class="wrap">
     <h2><span data-l="en">The finding that changed our own conclusions</span><span data-l="zh">推翻我們自己結論的那個發現</span></h2>
     <div class="callout">
@@ -219,11 +233,23 @@
         </tr>
       </tbody>
     </table>
+          <p class="method">
+        <span data-l="en"><b>Bench:</b> NVIDIA RTX A5000 24 GB · Windows 11, WDDM, driver 580.97 ·
+          Qwen3 8B via Ollama · measured 2026-08-28 · 78 readings committed ·
+          smaller cards emulated by holding ballast VRAM, not by owning them.
+          <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/bench/results.json">Raw readings</a> ·
+          <a href="https://github.com/tangyistudio/local-ai-girlfriend/tree/main/bench">Reproduce</a></span>
+        <span data-l="zh"><b>量測環境：</b>NVIDIA RTX A5000 24 GB · Windows 11、WDDM、驅動 580.97 ·
+          Qwen3 8B 透過 Ollama · 量於 2026-08-28 · 提交了 78 筆讀數 ·
+          小卡是用壓艙顯存模擬的，不是真的擁有那張卡。
+          <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/bench/results.json">原始讀數</a> ·
+          <a href="https://github.com/tangyistudio/local-ai-girlfriend/tree/main/bench">重現方式</a></span>
+      </p>
     <p><a data-l="en" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/01-tiers.md">Full configurations and caveats →</a><a data-l="zh" href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/01-tiers.zh-TW.md">完整配置與但書 →</a></p>
   </div>
 </section>
 
-<section>
+<section id="demo-explained">
   <div class="wrap">
     <h2><span data-l="en">What that demo is actually doing</span><span data-l="zh">那個 demo 實際上在做什麼</span></h2>
     <p>
@@ -281,7 +307,7 @@
   </div>
 </section>
 
-<section>
+<section id="surprises">
   <div class="wrap">
     <h2><span data-l="en">Other things that surprised us</span><span data-l="zh">其他意外的發現</span></h2>
     <div class="grid two">
@@ -331,7 +357,7 @@
   </div>
 </section>
 
-<section>
+<section id="provenance">
   <div class="wrap">
     <h2><span data-l="en">How to know these numbers are real</span><span data-l="zh">怎麼知道這些數字是真的</span></h2>
     <p>
@@ -359,6 +385,67 @@
     <p><a href="qa.html"><span data-l="en">More on what we got wrong →</span><span data-l="zh">更多我們搞錯的事 →</span></a></p>
   </div>
 </section>
+
+
+
+<section id="docs">
+  <div class="wrap">
+    <h2><span data-l="en">Everything, in order</span><span data-l="zh">全部文件，依序</span></h2>
+    <p><span data-l="en">Nine documents, each in English and Traditional Chinese, plus the code they
+      describe. The page above is the summary; these are the working notes, including the parts
+      where we were wrong.</span>
+      <span data-l="zh">九份文件，各有英文與繁體中文版，加上它們所描述的程式碼。上面那一頁是摘要；這些是工作筆記，包含我們搞錯的部分。</span></p>
+    <table class="docs-list">
+      <tbody>
+        <tr><td>00-hardware</td><td><span data-l="en">What the VRAM actually costs</span><span data-l="zh">顯存實際上要花多少</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/00-hardware.zh-TW.md">中文</a></td></tr>
+        <tr><td>01-tiers</td><td><span data-l="en">Configurations per card size</span><span data-l="zh">各種顯卡容量的配置</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/01-tiers.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/01-tiers.zh-TW.md">中文</a></td></tr>
+        <tr><td>02-architecture</td><td><span data-l="en">How the pieces fit together</span><span data-l="zh">各個元件怎麼組起來</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/02-architecture.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/02-architecture.zh-TW.md">中文</a></td></tr>
+        <tr><td>03-components</td><td><span data-l="en">What each model is and costs</span><span data-l="zh">每個模型是什麼、要多少</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/03-components.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/03-components.zh-TW.md">中文</a></td></tr>
+        <tr><td>04-latency</td><td><span data-l="en">Where the wait goes</span><span data-l="zh">等待都花在哪裡</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/04-latency.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/04-latency.zh-TW.md">中文</a></td></tr>
+        <tr><td>05-assets</td><td><span data-l="en">Making a clip library that joins</span><span data-l="zh">做出接得起來的片庫</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/05-assets.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/05-assets.zh-TW.md">中文</a></td></tr>
+        <tr><td>06-playback</td><td><span data-l="en">Cutting between clips without a seam</span><span data-l="zh">在片段之間切換而不露接縫</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/06-playback.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/06-playback.zh-TW.md">中文</a></td></tr>
+        <tr><td>07-licenses</td><td><span data-l="en">What you are allowed to ship</span><span data-l="zh">你可以拿什麼去出貨</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/07-licenses.zh-TW.md">中文</a></td></tr>
+        <tr><td>08-ops</td><td><span data-l="en">Keeping it running</span><span data-l="zh">讓它一直跑著</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/08-ops.md">EN</a> · <a href="https://github.com/tangyistudio/local-ai-girlfriend/blob/main/docs/08-ops.zh-TW.md">中文</a></td></tr>
+        <tr><td>bench/</td><td><span data-l="en">The measurement harness and the raw readings</span><span data-l="zh">量測腳本與原始讀數</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/tree/main/bench">code</a></td></tr>
+        <tr><td>player/</td><td><span data-l="en">The seamless clip player, 18 tests</span><span data-l="zh">無接縫片段播放器，18 個測試</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/tree/main/player">code</a></td></tr>
+        <tr><td>services/</td><td><span data-l="en">The orchestrator and its service contract</span><span data-l="zh">編排器與服務介面約定</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/tree/main/services">code</a></td></tr>
+        <tr><td>scripts/</td><td><span data-l="en">Process supervision that survives a crash loop</span><span data-l="zh">撐得過重啟迴圈的行程監管</span></td><td><a href="https://github.com/tangyistudio/local-ai-girlfriend/tree/main/scripts">code</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="not-measured">
+  <div class="wrap">
+    <h2><span data-l="en">What these numbers do not measure</span><span data-l="zh">這些數字沒有量到什麼</span></h2>
+    <p><span data-l="en">Every figure here has a boundary, and the boundary is the part people quote
+      past. This section exists so that when someone says we claimed more than we did, there is
+      something to point at.</span>
+      <span data-l="zh">這裡每個數字都有邊界，而被引用時最常被跳過的正是那個邊界。這一節的存在，是為了在有人說我們宣稱得比實際更多時，有東西可以指。</span></p>
+    <ul>
+      <li><span data-l="en"><b>Capacity, not bandwidth.</b> Smaller cards are emulated by holding
+        ballast VRAM on a 24 GB card. That reproduces <em>how much fits</em>. It does not reproduce a
+        real 8 GB card's memory bandwidth, so "it fits" transfers and "it is this fast" does
+        not.</span>
+        <span data-l="zh"><b>容量，不是頻寬。</b> 小卡是在 24 GB 卡上用壓艙顯存模擬的。那重現的是<em>裝不裝得下</em>，不是真實 8 GB 卡的記憶體頻寬——所以「裝得下」可以套用，「有這麼快」不行。</span></li>
+      <li><span data-l="en"><b>One machine, one OS.</b> Windows 11 in WDDM mode. No Linux
+        measurements, no multi-GPU, no cloud instances.</span>
+        <span data-l="zh"><b>一台機器、一個作業系統。</b> Windows 11 的 WDDM 模式。沒有 Linux 的量測、沒有多卡、沒有雲端執行個體。</span></li>
+      <li><span data-l="en"><b>No 32 GB hardware.</b> That tier is reasoning, not measurement, and
+        the table says so.</span>
+        <span data-l="zh"><b>沒有 32 GB 的硬體。</b> 那一級是推理不是量測，表格上也是這樣標的。</span></li>
+      <li><span data-l="en"><b>Deltas, not per-process figures.</b> Per-process VRAM does not exist
+        under WDDM, so every number is a difference against a measured desktop baseline — which is
+        itself 1.9–3.4 GB, or 40% of an 8 GB card before anything loads.</span>
+        <span data-l="zh"><b>是差值，不是每個行程的用量。</b> WDDM 底下沒有每行程顯存這種東西，所以每個數字都是對一個實測桌面基準的差——而那個基準本身就是 1.9–3.4 GB，等於在載入任何東西之前就吃掉 8 GB 卡的 40%。</span></li>
+      <li><span data-l="en"><b>One user at a time.</b> Beyond a single residency and concurrency
+        test, nothing here measures load.</span>
+        <span data-l="zh"><b>一次一個使用者。</b> 除了一次常駐與並行測試之外，這裡沒有任何負載量測。</span></li>
+    </ul>
+  </div>
+</section>
+
+</main>
 
 <footer>
   <div class="wrap">
@@ -415,6 +502,37 @@
       fullButton: document.getElementById('bFull'),
       breakButton: document.getElementById('bBreak'),
     },
+  });
+
+  // Copy button.
+  //
+  // ⚠️ The clipboard promise must FALL THROUGH to execCommand on rejection, not
+  // be swallowed. writeText rejects whenever the document is not focused - which
+  // happens for real users too, not just under automation - and the first
+  // version caught that with an empty handler, so the click did nothing at all
+  // and said nothing about it. A silent catch on a user-facing action is the
+  // same defect as a stuck button.
+  const cc = document.getElementById('copyCmd');
+  if (cc) cc.addEventListener('click', () => {
+    const text = cc.parentElement.querySelector('code').innerText;
+    const done = () => {
+      cc.textContent = 'copied'; cc.classList.add('ok');
+      setTimeout(() => { cc.textContent = 'copy'; cc.classList.remove('ok'); }, 1600);
+    };
+    const legacy = () => {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch { ok = false; }
+      ta.remove();
+      if (ok) done(); else { cc.textContent = 'select it'; setTimeout(() => { cc.textContent = 'copy'; }, 1600); }
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(legacy);
+    } else {
+      legacy();
+    }
   });
 </script>
 </html>

@@ -283,3 +283,102 @@ body.demo-full { overflow: hidden; }
 .chat-head { display: flex; align-items: center; gap: 9px; }
 .chat-head b { color: var(--bright); font-size: 15px; }
 .chat-head .grow { flex: 1; }
+
+/* ── Accessibility and navigation floor ───────────────────────────────────── */
+
+/* ⚠️ Skip link first in the DOM. The demo puts eight buttons between the top of
+ * the page and the first sentence of the argument; without this a keyboard user
+ * tabs through the whole player to reach the content. */
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 300;
+  background: var(--accent); color: #06101f; font-weight: 600;
+  padding: 10px 16px; border-radius: 0 0 8px 0;
+}
+.skip:focus { left: 0; }
+
+/* There was no outline rule at all, so keyboard focus fell back to the UA
+ * default over a dark background - effectively invisible on the look, size and
+ * question buttons. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ⚠️ The sticky header is 57px plus its border; without this an anchor scrolls
+ * its own heading underneath it. #tiers did exactly that. */
+:target,
+section[id],
+h2[id],
+h3[id] { scroll-margin-top: 76px; }
+
+/* ⚠️ This page autoplays a looping video of a human face on load, with no user
+ * gesture. That is the worst category of hero for vestibular sensitivity, and a
+ * project this careful about honest defaults should not ship it. The player
+ * checks the same query and holds on the poster frame instead. */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ── Q&A navigation ───────────────────────────────────────────────────────── */
+
+/* Permalink per question. Sixteen answers with no ids means nobody can cite one
+ * in a comment thread, which is the main way this material would travel. */
+.qa h3 { position: relative; }
+.qa h3 .anchor {
+  position: absolute; left: -1.1em; top: 0;
+  color: var(--line-2); text-decoration: none; opacity: 0;
+  transition: opacity .12s;
+}
+.qa h3:hover .anchor,
+.qa h3 .anchor:focus { opacity: 1; color: var(--accent); }
+@media (max-width: 720px) { .qa h3 .anchor { display: none; } }
+
+.qa-index {
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 12px; padding: 18px 22px; margin: 22px 0 34px;
+}
+.qa-index h3 { margin: 0 0 12px; font-size: 15px; color: var(--dim);
+  text-transform: uppercase; letter-spacing: .06em; font-weight: 500; }
+.qa-index ol { margin: 0; padding-left: 1.2em; columns: 2; column-gap: 32px; }
+@media (max-width: 720px) { .qa-index ol { columns: 1; } }
+.qa-index li { margin: 0 0 7px; font-size: 14.5px; break-inside: avoid; }
+.qa-index a { text-decoration: none; }
+.qa-index a:hover { text-decoration: underline; }
+.totop { display: block; margin-top: 18px; font-size: 13px; color: var(--dim); text-decoration: none; }
+.totop:hover { color: var(--bright); }
+
+/* ── Copyable command ─────────────────────────────────────────────────────── */
+.cmd { position: relative; margin: 18px 0 0; }
+.cmd pre { margin: 0; padding-right: 92px; }
+.cmd button {
+  position: absolute; top: 10px; right: 10px;
+  background: #1a2130; color: var(--dim); border: 1px solid var(--line-2);
+  border-radius: 7px; padding: 5px 11px; font: inherit; font-size: 12px;
+  font-family: var(--mono); cursor: pointer;
+}
+.cmd button:hover { color: var(--bright); background: #222a3b; }
+.cmd button.ok { color: var(--good); border-color: #23503f; }
+
+/* ── Docs index ───────────────────────────────────────────────────────────── */
+.docs-list { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 15px; }
+.docs-list td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.docs-list td:first-child { white-space: nowrap; font-family: var(--mono); font-size: 13px; }
+.docs-list td:last-child { white-space: nowrap; text-align: right; font-size: 13px; }
+
+/* ── Provenance footnote under a number-bearing block ─────────────────────── */
+.method {
+  font-family: var(--mono); font-size: 12px; line-height: 1.6;
+  color: var(--dim); border-left: 2px solid var(--line-2);
+  padding-left: 12px; margin: 10px 0 0;
+}
+.method b { color: var(--text); font-weight: 500; }
+
+/* ── For / not for ────────────────────────────────────────────────────────── */
+.fitgrid { display: grid; gap: 16px; margin: 20px 0; }
+@media (min-width: 760px) { .fitgrid { grid-template-columns: 1fr 1fr; } }
+.fitgrid ul { margin: 8px 0 0; padding-left: 1.15em; }
+.fitgrid li { margin-bottom: 8px; }
